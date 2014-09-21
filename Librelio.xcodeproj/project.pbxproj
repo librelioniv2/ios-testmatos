@@ -227,6 +227,58 @@
 		14A80CA8168EC3DB006B0AA4 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 14A80BEE168EC3DB006B0AA4 /* white.png */; };
 		14AF2AA4190E80D300FE87EC /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AF2AA2190E80D200FE87EC /* libGoogleAnalyticsServices.a */; };
 		14AF2AA5190E80D300FE87EC /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14AF2AA2190E80D200FE87EC /* libGoogleAnalyticsServices.a */; };
+		14C9CA8C19CEA37A00095833 /* WAAdvancedSearchPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA6519CEA37A00095833 /* WAAdvancedSearchPopover.xib */; };
+		14C9CA8D19CEA37A00095833 /* WAAdvancedSearchPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA6519CEA37A00095833 /* WAAdvancedSearchPopover.xib */; };
+		14C9CA8E19CEA37A00095833 /* WAAdvancedSearchPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6719CEA37A00095833 /* WAAdvancedSearchPopoverController.m */; };
+		14C9CA8F19CEA37A00095833 /* WAAdvancedSearchPopoverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6719CEA37A00095833 /* WAAdvancedSearchPopoverController.m */; };
+		14C9CA9019CEA37A00095833 /* WABuyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6919CEA37A00095833 /* WABuyViewController.m */; };
+		14C9CA9119CEA37A00095833 /* WABuyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6919CEA37A00095833 /* WABuyViewController.m */; };
+		14C9CA9219CEA37A00095833 /* WADatabaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6B19CEA37A00095833 /* WADatabaseController.m */; };
+		14C9CA9319CEA37A00095833 /* WADatabaseController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6B19CEA37A00095833 /* WADatabaseController.m */; };
+		14C9CA9419CEA37A00095833 /* WADetailsIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA6C19CEA37A00095833 /* WADetailsIphone.xib */; };
+		14C9CA9519CEA37A00095833 /* WADetailsIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA6C19CEA37A00095833 /* WADetailsIphone.xib */; };
+		14C9CA9619CEA37A00095833 /* WADetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6E19CEA37A00095833 /* WADetailsViewController.m */; };
+		14C9CA9719CEA37A00095833 /* WADetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA6E19CEA37A00095833 /* WADetailsViewController.m */; };
+		14C9CA9819CEA37A00095833 /* WAGenericPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7019CEA37A00095833 /* WAGenericPopover.m */; };
+		14C9CA9919CEA37A00095833 /* WAGenericPopover.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7019CEA37A00095833 /* WAGenericPopover.m */; };
+		14C9CA9A19CEA37A00095833 /* WAGenericPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7119CEA37A00095833 /* WAGenericPopover.xib */; };
+		14C9CA9B19CEA37A00095833 /* WAGenericPopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7119CEA37A00095833 /* WAGenericPopover.xib */; };
+		14C9CA9C19CEA37A00095833 /* WALexiqueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7319CEA37A00095833 /* WALexiqueController.m */; };
+		14C9CA9D19CEA37A00095833 /* WALexiqueController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7319CEA37A00095833 /* WALexiqueController.m */; };
+		14C9CA9E19CEA37A00095833 /* WALexiqueIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7419CEA37A00095833 /* WALexiqueIpad.xib */; };
+		14C9CA9F19CEA37A00095833 /* WALexiqueIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7419CEA37A00095833 /* WALexiqueIpad.xib */; };
+		14C9CAA019CEA37A00095833 /* WALexiqueIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7519CEA37A00095833 /* WALexiqueIphone.xib */; };
+		14C9CAA119CEA37A00095833 /* WALexiqueIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7519CEA37A00095833 /* WALexiqueIphone.xib */; };
+		14C9CAA219CEA37A00095833 /* WAPageContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7719CEA37A00095833 /* WAPageContainerController.m */; };
+		14C9CAA319CEA37A00095833 /* WAPageContainerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7719CEA37A00095833 /* WAPageContainerController.m */; };
+		14C9CAA419CEA37A00095833 /* WAPopoverView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7819CEA37A00095833 /* WAPopoverView.xib */; };
+		14C9CAA519CEA37A00095833 /* WAPopoverView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7819CEA37A00095833 /* WAPopoverView.xib */; };
+		14C9CAA619CEA37A00095833 /* WAPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7A19CEA37A00095833 /* WAPopoverViewController.m */; };
+		14C9CAA719CEA37A00095833 /* WAPopoverViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7A19CEA37A00095833 /* WAPopoverViewController.m */; };
+		14C9CAA819CEA37A00095833 /* WAPrixIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7B19CEA37A00095833 /* WAPrixIpad.xib */; };
+		14C9CAA919CEA37A00095833 /* WAPrixIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7B19CEA37A00095833 /* WAPrixIpad.xib */; };
+		14C9CAAA19CEA37A00095833 /* WAPrixIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7C19CEA37A00095833 /* WAPrixIphone.xib */; };
+		14C9CAAB19CEA37A00095833 /* WAPrixIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA7C19CEA37A00095833 /* WAPrixIphone.xib */; };
+		14C9CAAC19CEA37A00095833 /* WAPrixViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7E19CEA37A00095833 /* WAPrixViewController.m */; };
+		14C9CAAD19CEA37A00095833 /* WAPrixViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA7E19CEA37A00095833 /* WAPrixViewController.m */; };
+		14C9CAAE19CEA37A00095833 /* WAResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8019CEA37A00095833 /* WAResultsViewController.m */; };
+		14C9CAAF19CEA37A00095833 /* WAResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8019CEA37A00095833 /* WAResultsViewController.m */; };
+		14C9CAB019CEA37A00095833 /* WAResultsViewIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8119CEA37A00095833 /* WAResultsViewIpad.xib */; };
+		14C9CAB119CEA37A00095833 /* WAResultsViewIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8119CEA37A00095833 /* WAResultsViewIpad.xib */; };
+		14C9CAB219CEA37A00095833 /* WAResultsViewIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8219CEA37A00095833 /* WAResultsViewIphone.xib */; };
+		14C9CAB319CEA37A00095833 /* WAResultsViewIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8219CEA37A00095833 /* WAResultsViewIphone.xib */; };
+		14C9CAB419CEA37A00095833 /* WATableContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8419CEA37A00095833 /* WATableContainerView.m */; };
+		14C9CAB519CEA37A00095833 /* WATableContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8419CEA37A00095833 /* WATableContainerView.m */; };
+		14C9CAB619CEA37A00095833 /* WATableSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8619CEA37A00095833 /* WATableSelectionCell.m */; };
+		14C9CAB719CEA37A00095833 /* WATableSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8619CEA37A00095833 /* WATableSelectionCell.m */; };
+		14C9CAB819CEA37A00095833 /* WATableSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8719CEA37A00095833 /* WATableSelectionCell.xib */; };
+		14C9CAB919CEA37A00095833 /* WATableSelectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8719CEA37A00095833 /* WATableSelectionCell.xib */; };
+		14C9CABA19CEA37A00095833 /* WATableSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8919CEA37A00095833 /* WATableSelectionController.m */; };
+		14C9CABB19CEA37A00095833 /* WATableSelectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 14C9CA8919CEA37A00095833 /* WATableSelectionController.m */; };
+		14C9CABC19CEA37A00095833 /* WATableSelectionIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8A19CEA37A00095833 /* WATableSelectionIpad.xib */; };
+		14C9CABD19CEA37A00095833 /* WATableSelectionIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8A19CEA37A00095833 /* WATableSelectionIpad.xib */; };
+		14C9CABE19CEA37A00095833 /* WATableSelectionIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8B19CEA37A00095833 /* WATableSelectionIphone.xib */; };
+		14C9CABF19CEA37A00095833 /* WATableSelectionIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14C9CA8B19CEA37A00095833 /* WATableSelectionIphone.xib */; };
 		14DB116C164BEDC3001FE76B /* HTMLTemplate.html in Resources */ = {isa = PBXBuildFile; fileRef = 14D46E381354A52000B388A8 /* HTMLTemplate.html */; };
 		14DB116D164BEDC3001FE76B /* WAFileManagerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 142533121361BEFE00F6BB3D /* WAFileManagerCell.xib */; };
 		14DB116F164BEDC3001FE76B /* WAGridCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14FD065B14222B1D002F9E35 /* WAGridCell.xib */; };
@@ -558,6 +610,45 @@
 		14C5D09112646A170034FE23 /* WARSSViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WARSSViewController.m; sourceTree = "<group>"; };
 		14C744D41459AF8800767C52 /* WAShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAShareView.h; sourceTree = "<group>"; };
 		14C744D51459AF8800767C52 /* WAShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAShareView.m; sourceTree = "<group>"; };
+		14C9CA6519CEA37A00095833 /* WAAdvancedSearchPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAAdvancedSearchPopover.xib; sourceTree = "<group>"; };
+		14C9CA6619CEA37A00095833 /* WAAdvancedSearchPopoverController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAAdvancedSearchPopoverController.h; sourceTree = "<group>"; };
+		14C9CA6719CEA37A00095833 /* WAAdvancedSearchPopoverController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAAdvancedSearchPopoverController.m; sourceTree = "<group>"; };
+		14C9CA6819CEA37A00095833 /* WABuyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABuyViewController.h; sourceTree = "<group>"; };
+		14C9CA6919CEA37A00095833 /* WABuyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WABuyViewController.m; sourceTree = "<group>"; };
+		14C9CA6A19CEA37A00095833 /* WADatabaseController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WADatabaseController.h; sourceTree = "<group>"; };
+		14C9CA6B19CEA37A00095833 /* WADatabaseController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WADatabaseController.m; sourceTree = "<group>"; };
+		14C9CA6C19CEA37A00095833 /* WADetailsIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WADetailsIphone.xib; sourceTree = "<group>"; };
+		14C9CA6D19CEA37A00095833 /* WADetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WADetailsViewController.h; sourceTree = "<group>"; };
+		14C9CA6E19CEA37A00095833 /* WADetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WADetailsViewController.m; sourceTree = "<group>"; };
+		14C9CA6F19CEA37A00095833 /* WAGenericPopover.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAGenericPopover.h; sourceTree = "<group>"; };
+		14C9CA7019CEA37A00095833 /* WAGenericPopover.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAGenericPopover.m; sourceTree = "<group>"; };
+		14C9CA7119CEA37A00095833 /* WAGenericPopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAGenericPopover.xib; sourceTree = "<group>"; };
+		14C9CA7219CEA37A00095833 /* WALexiqueController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WALexiqueController.h; sourceTree = "<group>"; };
+		14C9CA7319CEA37A00095833 /* WALexiqueController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WALexiqueController.m; sourceTree = "<group>"; };
+		14C9CA7419CEA37A00095833 /* WALexiqueIpad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WALexiqueIpad.xib; sourceTree = "<group>"; };
+		14C9CA7519CEA37A00095833 /* WALexiqueIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WALexiqueIphone.xib; sourceTree = "<group>"; };
+		14C9CA7619CEA37A00095833 /* WAPageContainerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAPageContainerController.h; sourceTree = "<group>"; };
+		14C9CA7719CEA37A00095833 /* WAPageContainerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAPageContainerController.m; sourceTree = "<group>"; };
+		14C9CA7819CEA37A00095833 /* WAPopoverView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAPopoverView.xib; sourceTree = "<group>"; };
+		14C9CA7919CEA37A00095833 /* WAPopoverViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAPopoverViewController.h; sourceTree = "<group>"; };
+		14C9CA7A19CEA37A00095833 /* WAPopoverViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAPopoverViewController.m; sourceTree = "<group>"; };
+		14C9CA7B19CEA37A00095833 /* WAPrixIpad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAPrixIpad.xib; sourceTree = "<group>"; };
+		14C9CA7C19CEA37A00095833 /* WAPrixIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAPrixIphone.xib; sourceTree = "<group>"; };
+		14C9CA7D19CEA37A00095833 /* WAPrixViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAPrixViewController.h; sourceTree = "<group>"; };
+		14C9CA7E19CEA37A00095833 /* WAPrixViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAPrixViewController.m; sourceTree = "<group>"; };
+		14C9CA7F19CEA37A00095833 /* WAResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAResultsViewController.h; sourceTree = "<group>"; };
+		14C9CA8019CEA37A00095833 /* WAResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAResultsViewController.m; sourceTree = "<group>"; };
+		14C9CA8119CEA37A00095833 /* WAResultsViewIpad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAResultsViewIpad.xib; sourceTree = "<group>"; };
+		14C9CA8219CEA37A00095833 /* WAResultsViewIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WAResultsViewIphone.xib; sourceTree = "<group>"; };
+		14C9CA8319CEA37A00095833 /* WATableContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableContainerView.h; sourceTree = "<group>"; };
+		14C9CA8419CEA37A00095833 /* WATableContainerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATableContainerView.m; sourceTree = "<group>"; };
+		14C9CA8519CEA37A00095833 /* WATableSelectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableSelectionCell.h; sourceTree = "<group>"; };
+		14C9CA8619CEA37A00095833 /* WATableSelectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATableSelectionCell.m; sourceTree = "<group>"; };
+		14C9CA8719CEA37A00095833 /* WATableSelectionCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WATableSelectionCell.xib; sourceTree = "<group>"; };
+		14C9CA8819CEA37A00095833 /* WATableSelectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WATableSelectionController.h; sourceTree = "<group>"; };
+		14C9CA8919CEA37A00095833 /* WATableSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATableSelectionController.m; sourceTree = "<group>"; };
+		14C9CA8A19CEA37A00095833 /* WATableSelectionIpad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WATableSelectionIpad.xib; sourceTree = "<group>"; };
+		14C9CA8B19CEA37A00095833 /* WATableSelectionIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WATableSelectionIphone.xib; sourceTree = "<group>"; };
 		14D08A1E13A9FEF600F0285D /* WAVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAVideoView.h; sourceTree = "<group>"; };
 		14D08A1F13A9FEF600F0285D /* WAVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAVideoView.m; sourceTree = "<group>"; };
 		14D205461289530E00DD65DC /* WAThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAThumbnailCell.h; sourceTree = "<group>"; };
@@ -708,6 +799,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				14C9CA6419CEA2CD00095833 /* TestMatosCode */,
 				14873F1F128302830075E915 /* Application */,
 				147AEB671379873C00E209A9 /* Categories */,
 				14FC1D73144DC65F006D75AD /* Singletons */,
@@ -1232,6 +1324,52 @@
 			name = "Share Module";
 			sourceTree = "<group>";
 		};
+		14C9CA6419CEA2CD00095833 /* TestMatosCode */ = {
+			isa = PBXGroup;
+			children = (
+				14C9CA6519CEA37A00095833 /* WAAdvancedSearchPopover.xib */,
+				14C9CA6619CEA37A00095833 /* WAAdvancedSearchPopoverController.h */,
+				14C9CA6719CEA37A00095833 /* WAAdvancedSearchPopoverController.m */,
+				14C9CA6819CEA37A00095833 /* WABuyViewController.h */,
+				14C9CA6919CEA37A00095833 /* WABuyViewController.m */,
+				14C9CA6A19CEA37A00095833 /* WADatabaseController.h */,
+				14C9CA6B19CEA37A00095833 /* WADatabaseController.m */,
+				14C9CA6C19CEA37A00095833 /* WADetailsIphone.xib */,
+				14C9CA6D19CEA37A00095833 /* WADetailsViewController.h */,
+				14C9CA6E19CEA37A00095833 /* WADetailsViewController.m */,
+				14C9CA6F19CEA37A00095833 /* WAGenericPopover.h */,
+				14C9CA7019CEA37A00095833 /* WAGenericPopover.m */,
+				14C9CA7119CEA37A00095833 /* WAGenericPopover.xib */,
+				14C9CA7219CEA37A00095833 /* WALexiqueController.h */,
+				14C9CA7319CEA37A00095833 /* WALexiqueController.m */,
+				14C9CA7419CEA37A00095833 /* WALexiqueIpad.xib */,
+				14C9CA7519CEA37A00095833 /* WALexiqueIphone.xib */,
+				14C9CA7619CEA37A00095833 /* WAPageContainerController.h */,
+				14C9CA7719CEA37A00095833 /* WAPageContainerController.m */,
+				14C9CA7819CEA37A00095833 /* WAPopoverView.xib */,
+				14C9CA7919CEA37A00095833 /* WAPopoverViewController.h */,
+				14C9CA7A19CEA37A00095833 /* WAPopoverViewController.m */,
+				14C9CA7B19CEA37A00095833 /* WAPrixIpad.xib */,
+				14C9CA7C19CEA37A00095833 /* WAPrixIphone.xib */,
+				14C9CA7D19CEA37A00095833 /* WAPrixViewController.h */,
+				14C9CA7E19CEA37A00095833 /* WAPrixViewController.m */,
+				14C9CA7F19CEA37A00095833 /* WAResultsViewController.h */,
+				14C9CA8019CEA37A00095833 /* WAResultsViewController.m */,
+				14C9CA8119CEA37A00095833 /* WAResultsViewIpad.xib */,
+				14C9CA8219CEA37A00095833 /* WAResultsViewIphone.xib */,
+				14C9CA8319CEA37A00095833 /* WATableContainerView.h */,
+				14C9CA8419CEA37A00095833 /* WATableContainerView.m */,
+				14C9CA8519CEA37A00095833 /* WATableSelectionCell.h */,
+				14C9CA8619CEA37A00095833 /* WATableSelectionCell.m */,
+				14C9CA8719CEA37A00095833 /* WATableSelectionCell.xib */,
+				14C9CA8819CEA37A00095833 /* WATableSelectionController.h */,
+				14C9CA8919CEA37A00095833 /* WATableSelectionController.m */,
+				14C9CA8A19CEA37A00095833 /* WATableSelectionIpad.xib */,
+				14C9CA8B19CEA37A00095833 /* WATableSelectionIphone.xib */,
+			);
+			name = TestMatosCode;
+			sourceTree = "<group>";
+		};
 		14D08A1D13A9FE4400F0285D /* Video Module */ = {
 			isa = PBXGroup;
 			children = (
@@ -1499,14 +1637,18 @@
 				1490867E17E375D700943DD2 /* rss@2x.png in Resources */,
 				1490867F17E375D700943DD2 /* top-list@2x.png in Resources */,
 				1490868017E375D700943DD2 /* WASplashWebViewController_iPhone.xib in Resources */,
+				14C9CAB919CEA37A00095833 /* WATableSelectionCell.xib in Resources */,
+				14C9CAA919CEA37A00095833 /* WAPrixIpad.xib in Resources */,
 				1490868117E375D700943DD2 /* WASplashScreenViewController_iPad.xib in Resources */,
 				144B2C5618229DE200CDD200 /* calendar@2x.png in Resources */,
 				1490868217E375D700943DD2 /* list.png in Resources */,
 				1490868317E375D700943DD2 /* WASplashScreenViewController_iPhone.xib in Resources */,
 				1490868B17E375D700943DD2 /* list@2x.png in Resources */,
+				14C9CAA519CEA37A00095833 /* WAPopoverView.xib in Resources */,
 				1490868D17E375D700943DD2 /* top-list.png in Resources */,
 				1490868E17E375D700943DD2 /* back@2x.png in Resources */,
 				144B2C5918229DE200CDD200 /* documents.png in Resources */,
+				14C9CAB119CEA37A00095833 /* WAResultsViewIpad.xib in Resources */,
 				1490869517E375D700943DD2 /* rss.png in Resources */,
 				1490869617E375D700943DD2 /* black.png in Resources */,
 				1490869717E375D700943DD2 /* BottomBarBackground.png in Resources */,
@@ -1517,8 +1659,11 @@
 				144B2C6818229DE200CDD200 /* info@2x.png in Resources */,
 				1490869C17E375D700943DD2 /* favoris-button-remove.png in Resources */,
 				1490869D17E375D700943DD2 /* favoris-button.png in Resources */,
+				14C9CA9B19CEA37A00095833 /* WAGenericPopover.xib in Resources */,
 				1490869E17E375D700943DD2 /* information@2x.png in Resources */,
+				14C9CAAB19CEA37A00095833 /* WAPrixIphone.xib in Resources */,
 				144B2C5318229DE200CDD200 /* calendar.png in Resources */,
+				14C9CAA119CEA37A00095833 /* WALexiqueIphone.xib in Resources */,
 				1490869F17E375D700943DD2 /* globe@2x.png in Resources */,
 				149086A017E375D700943DD2 /* folder.png in Resources */,
 				149086A117E375D700943DD2 /* globe.png in Resources */,
@@ -1526,11 +1671,17 @@
 				149086A217E375D700943DD2 /* information.png in Resources */,
 				149086A317E375D700943DD2 /* iphone.png in Resources */,
 				149086A417E375D700943DD2 /* Loader.png in Resources */,
+				14C9CA9F19CEA37A00095833 /* WALexiqueIpad.xib in Resources */,
 				144B2C6518229DE200CDD200 /* info.png in Resources */,
+				14C9CABD19CEA37A00095833 /* WATableSelectionIpad.xib in Resources */,
+				14C9CA9519CEA37A00095833 /* WADetailsIphone.xib in Resources */,
 				149086A517E375D700943DD2 /* newspaper.png in Resources */,
 				149086A617E375D700943DD2 /* Placeholder.png in Resources */,
 				144B2C6E18229DE200CDD200 /* refresh@2x.png in Resources */,
+				14C9CABF19CEA37A00095833 /* WATableSelectionIphone.xib in Resources */,
+				14C9CA8D19CEA37A00095833 /* WAAdvancedSearchPopover.xib in Resources */,
 				149086A717E375D700943DD2 /* rotate.png in Resources */,
+				14C9CAB319CEA37A00095833 /* WAResultsViewIphone.xib in Resources */,
 				149086A817E375D700943DD2 /* share-button.png in Resources */,
 				144B2C5F18229DE200CDD200 /* forward.png in Resources */,
 				149086A917E375D700943DD2 /* download@2x.png in Resources */,
@@ -1562,8 +1713,10 @@
 				14DB1171164BEDC3001FE76B /* WASplashWebViewController_iPhone.xib in Resources */,
 				146232FF17E1FE210066084C /* globe@2x.png in Resources */,
 				14DB1172164BEDC3001FE76B /* WASplashScreenViewController_iPad.xib in Resources */,
+				14C9CA9A19CEA37A00095833 /* WAGenericPopover.xib in Resources */,
 				14DB1173164BEDC3001FE76B /* WASplashScreenViewController_iPhone.xib in Resources */,
 				1490867017E332A200943DD2 /* rss@2x.png in Resources */,
+				14C9CAA019CEA37A00095833 /* WALexiqueIphone.xib in Resources */,
 				144B2C6D18229DE200CDD200 /* refresh@2x.png in Resources */,
 				146232F917E1FE210066084C /* download.png in Resources */,
 				144B2C6718229DE200CDD200 /* info@2x.png in Resources */,
@@ -1579,10 +1732,12 @@
 				14DB1397164C52C4001FE76B /* Icon-512.png in Resources */,
 				14DB1398164C52C4001FE76B /* Icon-512@2x.png in Resources */,
 				14DB1399164C52C4001FE76B /* Icon-72.png in Resources */,
+				14C9CABE19CEA37A00095833 /* WATableSelectionIphone.xib in Resources */,
 				14DB139A164C52C4001FE76B /* Icon-72@2x.png in Resources */,
 				14DB139B164C52C4001FE76B /* Icon.png in Resources */,
 				14DB139C164C52C4001FE76B /* Icon@2x.png in Resources */,
 				14DB139D164C52C4001FE76B /* Magazines.plist in Resources */,
+				14C9CABC19CEA37A00095833 /* WATableSelectionIpad.xib in Resources */,
 				14DB139E164C52C4001FE76B /* Magazines_background.png in Resources */,
 				14DB139F164C52C4001FE76B /* Tabs.plist in Resources */,
 				14DB13A0164C52C4001FE76B /* wind-generic.png in Resources */,
@@ -1590,13 +1745,17 @@
 				144B2C5818229DE200CDD200 /* documents.png in Resources */,
 				144B2C5B18229DE200CDD200 /* documents@2x.png in Resources */,
 				144B2C5E18229DE200CDD200 /* forward.png in Resources */,
+				14C9CAB819CEA37A00095833 /* WATableSelectionCell.xib in Resources */,
 				1462330717E1FE210066084C /* top-list@2x.png in Resources */,
 				14A80BCF168EC39C006B0AA4 /* black.png in Resources */,
 				14A80BF2168EC3DB006B0AA4 /* BottomBarBackground.png in Resources */,
+				14C9CAB219CEA37A00095833 /* WAResultsViewIphone.xib in Resources */,
 				146E000717E22654000EE3DB /* list.png in Resources */,
 				1490866E17E332A200943DD2 /* rss.png in Resources */,
+				14C9CA9419CEA37A00095833 /* WADetailsIphone.xib in Resources */,
 				1462330117E1FE210066084C /* information@2x.png in Resources */,
 				14A80BF9168EC3DB006B0AA4 /* button-question.png in Resources */,
+				14C9CA9E19CEA37A00095833 /* WALexiqueIpad.xib in Resources */,
 				14A80C00168EC3DB006B0AA4 /* damier.png in Resources */,
 				144B2C6A18229DE200CDD200 /* refresh.png in Resources */,
 				1462330317E1FE210066084C /* newspaper@2x.png in Resources */,
@@ -1604,17 +1763,21 @@
 				146232F517E1FE210066084C /* facebook.png in Resources */,
 				14A80C15168EC3DB006B0AA4 /* favoris-button-remove.png in Resources */,
 				14A80C1C168EC3DB006B0AA4 /* favoris-button.png in Resources */,
+				14C9CAAA19CEA37A00095833 /* WAPrixIphone.xib in Resources */,
 				1462330517E1FE210066084C /* top-list.png in Resources */,
 				144B2C5218229DE200CDD200 /* calendar.png in Resources */,
 				146232FB17E1FE210066084C /* download@2x.png in Resources */,
 				144B2C6118229DE200CDD200 /* forward@2x.png in Resources */,
 				14A80C2A168EC3DB006B0AA4 /* folder.png in Resources */,
+				14C9CAA819CEA37A00095833 /* WAPrixIpad.xib in Resources */,
 				14A80C31168EC3DB006B0AA4 /* globe.png in Resources */,
 				14A80C46168EC3DB006B0AA4 /* information.png in Resources */,
 				14A80C4D168EC3DB006B0AA4 /* iphone.png in Resources */,
+				14C9CA8C19CEA37A00095833 /* WAAdvancedSearchPopover.xib in Resources */,
 				14A80C54168EC3DB006B0AA4 /* Loader.png in Resources */,
 				14A80C5B168EC3DB006B0AA4 /* newspaper.png in Resources */,
 				14A80C69168EC3DB006B0AA4 /* Placeholder.png in Resources */,
+				14C9CAB019CEA37A00095833 /* WAResultsViewIpad.xib in Resources */,
 				146E000917E22654000EE3DB /* list@2x.png in Resources */,
 				14A80C77168EC3DB006B0AA4 /* rotate.png in Resources */,
 				14A80C85168EC3DB006B0AA4 /* share-button.png in Resources */,
@@ -1622,6 +1785,7 @@
 				146232F717E1FE210066084C /* facebook@2x.png in Resources */,
 				14A80C8C168EC3DB006B0AA4 /* slideshow.png in Resources */,
 				14A80C93168EC3DB006B0AA4 /* stop.png in Resources */,
+				14C9CAA419CEA37A00095833 /* WAPopoverView.xib in Resources */,
 				14A80C9A168EC3DB006B0AA4 /* synchronize.png in Resources */,
 				14A80CA1168EC3DB006B0AA4 /* video.png in Resources */,
 				14A80CA8168EC3DB006B0AA4 /* white.png in Resources */,
@@ -1673,6 +1837,7 @@
 				14E42D4B183BC5590062825A /* WAZippedHtmlParser.m in Sources */,
 				149086CD17E375D700943DD2 /* WARSSItemCell.m in Sources */,
 				149086CE17E375D700943DD2 /* WAOperationsManager.m in Sources */,
+				14C9CA9119CEA37A00095833 /* WABuyViewController.m in Sources */,
 				149086CF17E375D700943DD2 /* WARSSBackViewController.m in Sources */,
 				149086D017E375D700943DD2 /* WARSSParser.m in Sources */,
 				149086D117E375D700943DD2 /* WAPDFParserView.m in Sources */,
@@ -1681,13 +1846,17 @@
 				149086D317E375D700943DD2 /* WADrawPageOperation.m in Sources */,
 				149086D417E375D700943DD2 /* WATilingView.m in Sources */,
 				149086D517E375D700943DD2 /* WAButtonWithLink.m in Sources */,
+				14C9CA9719CEA37A00095833 /* WADetailsViewController.m in Sources */,
 				149086D617E375D700943DD2 /* WAMapView.m in Sources */,
 				149086D717E375D700943DD2 /* WATextView.m in Sources */,
 				149086D817E375D700943DD2 /* WASlideShowView.m in Sources */,
+				14C9CA8F19CEA37A00095833 /* WAAdvancedSearchPopoverController.m in Sources */,
 				149086D917E375D700943DD2 /* WAModuleViewController.m in Sources */,
+				14C9CABB19CEA37A00095833 /* WATableSelectionController.m in Sources */,
 				149086DA17E375D700943DD2 /* WADownloadingView.m in Sources */,
 				149086DB17E375D700943DD2 /* WAHTMLView.m in Sources */,
 				149086DC17E375D700943DD2 /* WAFileDownloadsManager.m in Sources */,
+				14C9CAAF19CEA37A00095833 /* WAResultsViewController.m in Sources */,
 				149086DD17E375D700943DD2 /* WATableView.m in Sources */,
 				149086DE17E375D700943DD2 /* WABuyView.m in Sources */,
 				149086DF17E375D700943DD2 /* WAPlainView.m in Sources */,
@@ -1698,20 +1867,25 @@
 				149086E417E375D700943DD2 /* WALabelView.m in Sources */,
 				149086E517E375D700943DD2 /* WARoundedButtonView.m in Sources */,
 				149086E617E375D700943DD2 /* WAFileManagerCell.m in Sources */,
+				14C9CAA719CEA37A00095833 /* WAPopoverViewController.m in Sources */,
 				149086E717E375D700943DD2 /* WAExternalView.m in Sources */,
 				149086E817E375D700943DD2 /* WALocalParser.m in Sources */,
 				149086E917E375D700943DD2 /* WAVideoView.m in Sources */,
 				14A309AE18378F1000A519DD /* SSZipArchive.m in Sources */,
 				149086EA17E375D700943DD2 /* UIView+WAModuleView.m in Sources */,
+				14C9CA9319CEA37A00095833 /* WADatabaseController.m in Sources */,
 				149086EB17E375D700943DD2 /* UIColor+WAAdditions.m in Sources */,
 				149086ED17E375D700943DD2 /* WAShareView.m in Sources */,
+				14C9CAAD19CEA37A00095833 /* WAPrixViewController.m in Sources */,
 				149086EE17E375D700943DD2 /* WABarButtonItemWithLink.m in Sources */,
 				149086EF17E375D700943DD2 /* WATransparentToolbar.m in Sources */,
 				149086F017E375D700943DD2 /* NSString+WAURLString.m in Sources */,
 				149086F117E375D700943DD2 /* Scanner.m in Sources */,
 				14784D2718375C8200605C51 /* WAOAMParser.m in Sources */,
 				149086F217E375D700943DD2 /* Font.m in Sources */,
+				14C9CAA319CEA37A00095833 /* WAPageContainerController.m in Sources */,
 				149086F317E375D700943DD2 /* FontCollection.m in Sources */,
+				14C9CA9919CEA37A00095833 /* WAGenericPopover.m in Sources */,
 				149086F417E375D700943DD2 /* RenderingState.m in Sources */,
 				149086F517E375D700943DD2 /* CMap.m in Sources */,
 				149086F617E375D700943DD2 /* WADocumentDownloadsManager.m in Sources */,
@@ -1723,6 +1897,8 @@
 				149086FB17E375D700943DD2 /* NSDate+WAAdditions.m in Sources */,
 				149086FC17E375D700943DD2 /* WAMissingResourcesDownloader.m in Sources */,
 				149086FD17E375D700943DD2 /* WAZoomImage.m in Sources */,
+				14C9CAB719CEA37A00095833 /* WATableSelectionCell.m in Sources */,
+				14C9CAB519CEA37A00095833 /* WATableContainerView.m in Sources */,
 				149086FE17E375D700943DD2 /* WAAddressAnnotation.m in Sources */,
 				149086FF17E375D700943DD2 /* WASplashWebViewController.m in Sources */,
 				1490870017E375D700943DD2 /* WASplashScreenViewController.m in Sources */,
@@ -1732,6 +1908,7 @@
 				1490871117E375D700943DD2 /* WAAtomParser.m in Sources */,
 				1490871217E375D700943DD2 /* WAHTMLParser.m in Sources */,
 				1490871317E375D700943DD2 /* WASearchView.m in Sources */,
+				14C9CA9D19CEA37A00095833 /* WALexiqueController.m in Sources */,
 				1490871417E375D700943DD2 /* WASearchListController.m in Sources */,
 				1490871517E375D700943DD2 /* SHKActivityIndicator.m in Sources */,
 				1490871617E375D700943DD2 /* WAImgParser.m in Sources */,
@@ -1763,6 +1940,7 @@
 				14E42D4A183BC5590062825A /* WAZippedHtmlParser.m in Sources */,
 				14DB11AD164BEDC3001FE76B /* WAOperationsManager.m in Sources */,
 				14DB11AE164BEDC3001FE76B /* WARSSBackViewController.m in Sources */,
+				14C9CA9019CEA37A00095833 /* WABuyViewController.m in Sources */,
 				14DB11AF164BEDC3001FE76B /* WARSSParser.m in Sources */,
 				14DB11B0164BEDC3001FE76B /* WAPDFParserView.m in Sources */,
 				14DB11B1164BEDC3001FE76B /* WAThumbnailCell.m in Sources */,
@@ -1771,13 +1949,17 @@
 				14DB11B3164BEDC3001FE76B /* WATilingView.m in Sources */,
 				14DB11B4164BEDC3001FE76B /* WAButtonWithLink.m in Sources */,
 				14DB11B5164BEDC3001FE76B /* WAMapView.m in Sources */,
+				14C9CA9619CEA37A00095833 /* WADetailsViewController.m in Sources */,
 				14DB11B6164BEDC3001FE76B /* WATextView.m in Sources */,
 				14DB11B7164BEDC3001FE76B /* WASlideShowView.m in Sources */,
 				14DB11B8164BEDC3001FE76B /* WAModuleViewController.m in Sources */,
+				14C9CA8E19CEA37A00095833 /* WAAdvancedSearchPopoverController.m in Sources */,
 				14DB11B9164BEDC3001FE76B /* WADownloadingView.m in Sources */,
+				14C9CABA19CEA37A00095833 /* WATableSelectionController.m in Sources */,
 				14DB11BA164BEDC3001FE76B /* WAHTMLView.m in Sources */,
 				14DB11BB164BEDC3001FE76B /* WAFileDownloadsManager.m in Sources */,
 				14DB11BC164BEDC3001FE76B /* WATableView.m in Sources */,
+				14C9CAAE19CEA37A00095833 /* WAResultsViewController.m in Sources */,
 				14DB11BD164BEDC3001FE76B /* WABuyView.m in Sources */,
 				14DB11BE164BEDC3001FE76B /* WAPlainView.m in Sources */,
 				14DB11BF164BEDC3001FE76B /* WATabTabParser.m in Sources */,
@@ -1788,20 +1970,25 @@
 				14DB11C5164BEDC3001FE76B /* WALabelView.m in Sources */,
 				14DB11C6164BEDC3001FE76B /* WARoundedButtonView.m in Sources */,
 				14DB11C8164BEDC3001FE76B /* WAFileManagerCell.m in Sources */,
+				14C9CAA619CEA37A00095833 /* WAPopoverViewController.m in Sources */,
 				14DB11C9164BEDC3001FE76B /* WAExternalView.m in Sources */,
 				14DB11CA164BEDC3001FE76B /* WALocalParser.m in Sources */,
 				14DB11CB164BEDC3001FE76B /* WAVideoView.m in Sources */,
 				14A309A918378F0F00A519DD /* SSZipArchive.m in Sources */,
 				14DB11CC164BEDC3001FE76B /* UIView+WAModuleView.m in Sources */,
+				14C9CA9219CEA37A00095833 /* WADatabaseController.m in Sources */,
 				14DB11CD164BEDC3001FE76B /* UIColor+WAAdditions.m in Sources */,
 				14DB11CF164BEDC3001FE76B /* WAShareView.m in Sources */,
+				14C9CAAC19CEA37A00095833 /* WAPrixViewController.m in Sources */,
 				14DB11D0164BEDC3001FE76B /* WABarButtonItemWithLink.m in Sources */,
 				14DB11D1164BEDC3001FE76B /* WATransparentToolbar.m in Sources */,
 				14DB11D2164BEDC3001FE76B /* NSString+WAURLString.m in Sources */,
 				14DB11D3164BEDC3001FE76B /* Scanner.m in Sources */,
 				14784D2618375C8200605C51 /* WAOAMParser.m in Sources */,
 				14DB11D4164BEDC3001FE76B /* Font.m in Sources */,
+				14C9CAA219CEA37A00095833 /* WAPageContainerController.m in Sources */,
 				14DB11D5164BEDC3001FE76B /* FontCollection.m in Sources */,
+				14C9CA9819CEA37A00095833 /* WAGenericPopover.m in Sources */,
 				14DB11D6164BEDC3001FE76B /* RenderingState.m in Sources */,
 				14DB11D7164BEDC3001FE76B /* CMap.m in Sources */,
 				14DB11D8164BEDC3001FE76B /* WADocumentDownloadsManager.m in Sources */,
@@ -1813,6 +2000,8 @@
 				14DB11DD164BEDC3001FE76B /* NSDate+WAAdditions.m in Sources */,
 				14DB11DE164BEDC3001FE76B /* WAMissingResourcesDownloader.m in Sources */,
 				14DB11DF164BEDC3001FE76B /* WAZoomImage.m in Sources */,
+				14C9CAB619CEA37A00095833 /* WATableSelectionCell.m in Sources */,
+				14C9CAB419CEA37A00095833 /* WATableContainerView.m in Sources */,
 				14DB11E0164BEDC3001FE76B /* WAAddressAnnotation.m in Sources */,
 				14DB11E1164BEDC3001FE76B /* WASplashWebViewController.m in Sources */,
 				14DB11E2164BEDC3001FE76B /* WASplashScreenViewController.m in Sources */,
@@ -1822,6 +2011,7 @@
 				14DB11F3164BEDC3001FE76B /* WAAtomParser.m in Sources */,
 				14DB11F4164BEDC3001FE76B /* WAHTMLParser.m in Sources */,
 				14DB11F5164BEDC3001FE76B /* WASearchView.m in Sources */,
+				14C9CA9C19CEA37A00095833 /* WALexiqueController.m in Sources */,
 				14DB11F6164BEDC3001FE76B /* WASearchListController.m in Sources */,
 				14DB11F7164BEDC3001FE76B /* SHKActivityIndicator.m in Sources */,
 				14DB11F8164BEDC3001FE76B /* WAImgParser.m in Sources */,
