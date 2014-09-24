@@ -4,11 +4,11 @@
 <array>
 	<dict>
 		<key>FileName</key>
-		<string>Magazines.plist?waupdate=300000</string>
+		<string>Magazines.plist?waupdate=30</string>
 		<key>Icon</key>
 		<string>tab-skieur.png</string>
 		<key>Title</key>
-		<string>Magazines</string>
+		<string>Tests</string>
 	</dict>
 	<dict>
 		<key>FileName</key>

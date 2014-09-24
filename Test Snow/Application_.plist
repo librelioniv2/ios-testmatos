@@ -6,8 +6,6 @@
 	<string>LibrelioS3</string>
 	<key>GoogleAnalyticsCode</key>
 	<string>UA-39620182-4</string>
-	<key>SharedSecret</key>
-	<string>026defcdebf5490893fbe5661224ef30</string>
 	<key>Splash</key>
 	<string>S3</string>
 </dict>
