@@ -4,11 +4,19 @@
 <array>
 	<dict>
 		<key>FileName</key>
-		<string>skieur_tests2014_.sqlite?wabbar=yes</string>
+		<string>Magazines.plist?waupdate=300000</string>
 		<key>Icon</key>
 		<string>tab-skieur.png</string>
 		<key>Title</key>
-		<string>Tests</string>
+		<string>Magazines</string>
+	</dict>
+	<dict>
+		<key>FileName</key>
+		<string>file://localhost/</string>
+		<key>Icon</key>
+		<string>folder.png</string>
+		<key>Title</key>
+		<string>Downloads</string>
 	</dict>
 	<dict>
 		<key>FileName</key>
