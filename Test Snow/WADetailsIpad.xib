@@ -42,7 +42,7 @@
 					<object class="IBUILabel" id="720541362">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{15, 70}, {377, 30}}</string>
+						<string key="NSFrame">{{15, 70}, {377, 33}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1070567127"/>
@@ -52,7 +52,7 @@
 						<int key="IBUITag">1</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
 						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-						<string key="IBUIText">Fiche du ski</string>
+						<string key="IBUIText">Fiche du snowboard</string>
 						<object class="NSColor" key="IBUITextColor">
 							<int key="NSColorSpace">3</int>
 							<bytes key="NSWhite">MQA</bytes>
@@ -112,7 +112,7 @@
 							<int key="type">2</int>
 							<double key="pointSize">15</double>
 						</object>
-						<object class="NSFont" key="IBUIFont" id="963958528">
+						<object class="NSFont" key="IBUIFont" id="813686743">
 							<string key="NSName">HelveticaNeue-Bold</string>
 							<double key="NSSize">15</double>
 							<int key="NSfFlags">16</int>
@@ -179,7 +179,7 @@
 							<string key="NSResourceName">favoris-button.png</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="422030620"/>
-						<reference key="IBUIFont" ref="963958528"/>
+						<reference key="IBUIFont" ref="813686743"/>
 					</object>
 					<object class="IBUIButton" id="503372496">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -204,7 +204,7 @@
 							<string key="NSResourceName">share-button.png</string>
 						</object>
 						<reference key="IBUIFontDescription" ref="422030620"/>
-						<reference key="IBUIFont" ref="963958528"/>
+						<reference key="IBUIFont" ref="813686743"/>
 					</object>
 					<object class="IBUIWebView" id="206510012">
 						<reference key="NSNextResponder" ref="191373211"/>
@@ -212,6 +212,7 @@
 						<string key="NSFrame">{{0, 150}, {432, 776}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MSAxIDEAA</bytes>
