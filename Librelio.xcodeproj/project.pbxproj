@@ -44,6 +44,9 @@
 		146E000317E20F49000EE3DB /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146EFFFF17E20F49000EE3DB /* back@2x.png */; };
 		146E000717E22654000EE3DB /* list.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E000417E22654000EE3DB /* list.png */; };
 		146E000917E22654000EE3DB /* list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E000517E22654000EE3DB /* list@2x.png */; };
+		146E122319E9137C00506766 /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E122019E9137C00506766 /* Icon-76@2x.png */; };
+		146E122419E9137C00506766 /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E122119E9137C00506766 /* Icon-60@2x.png */; };
+		146E122519E9137C00506766 /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E122219E9137C00506766 /* Icon-76.png */; };
 		146E9FED19D56E9000C3F6E6 /* Default-736h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E9FEA19D56E9000C3F6E6 /* Default-736h@3x.png */; };
 		146E9FEE19D56E9000C3F6E6 /* Default-Landscape@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E9FEB19D56E9000C3F6E6 /* Default-Landscape@3x.png */; };
 		146E9FEF19D56E9000C3F6E6 /* Default-667h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 146E9FEC19D56E9000C3F6E6 /* Default-667h@2x.png */; };
@@ -828,7 +831,6 @@
 		14F41F4319D2FCD6009E5312 /* WASearchTableCellIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F41ED919D2FCD5009E5312 /* WASearchTableCellIphone.xib */; };
 		14F41F4419D2FCD6009E5312 /* WASearchTableCellIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EDA19D2FCD5009E5312 /* WASearchTableCellIpad.xib */; };
 		14F41F4519D2FCD6009E5312 /* WALeftViewIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EDB19D2FCD5009E5312 /* WALeftViewIpad.xib */; };
-		14F41F4619D2FCD6009E5312 /* Application.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EDC19D2FCD5009E5312 /* Application.plist */; };
 		14F41F4719D2FCD6009E5312 /* Tabs.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EDD19D2FCD5009E5312 /* Tabs.plist */; };
 		14F41F5119D2FCD6009E5312 /* TesterChoice.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EE719D2FCD5009E5312 /* TesterChoice.png */; };
 		14F41F5219D2FCD6009E5312 /* tab-skieur.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F41EE819D2FCD5009E5312 /* tab-skieur.png */; };
@@ -1114,6 +1116,9 @@
 		146DAA7A1543D077000B7B69 /* WAAtomParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WAAtomParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		146E000417E22654000EE3DB /* list.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = list.png; path = Resources/list.png; sourceTree = "<group>"; };
 		146E000517E22654000EE3DB /* list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "list@2x.png"; path = "Resources/list@2x.png"; sourceTree = "<group>"; };
+		146E122019E9137C00506766 /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Test Skis/Icon-76@2x.png"; sourceTree = "<group>"; };
+		146E122119E9137C00506766 /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Test Skis/Icon-60@2x.png"; sourceTree = "<group>"; };
+		146E122219E9137C00506766 /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Test Skis/Icon-76.png"; sourceTree = "<group>"; };
 		146E9FEA19D56E9000C3F6E6 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		146E9FEB19D56E9000C3F6E6 /* Default-Landscape@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape@3x.png"; sourceTree = "<group>"; };
 		146E9FEC19D56E9000C3F6E6 /* Default-667h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667h@2x.png"; sourceTree = "<group>"; };
@@ -1302,8 +1307,8 @@
 		14C9CA8919CEA37A00095833 /* WATableSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WATableSelectionController.m; sourceTree = "<group>"; };
 		14C9CA8A19CEA37A00095833 /* WATableSelectionIpad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WATableSelectionIpad.xib; sourceTree = "<group>"; };
 		14C9CA8B19CEA37A00095833 /* WATableSelectionIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WATableSelectionIphone.xib; sourceTree = "<group>"; };
-		14C9CB9619CEA55100095833 /* Wind copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wind copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		14C9CC6E19CEA58500095833 /* TestSkis copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TestSkis copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		14C9CB9619CEA55100095833 /* TestSkis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSkis.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		14C9CC6E19CEA58500095833 /* TestSnow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestSnow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		14D08A1E13A9FEF600F0285D /* WAVideoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAVideoView.h; sourceTree = "<group>"; };
 		14D08A1F13A9FEF600F0285D /* WAVideoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WAVideoView.m; sourceTree = "<group>"; };
 		14D205461289530E00DD65DC /* WAThumbnailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAThumbnailCell.h; sourceTree = "<group>"; };
@@ -2382,6 +2387,9 @@
 		14F41DD719D2F159009E5312 /* Test Skis */ = {
 			isa = PBXGroup;
 			children = (
+				146E122019E9137C00506766 /* Icon-76@2x.png */,
+				146E122119E9137C00506766 /* Icon-60@2x.png */,
+				146E122219E9137C00506766 /* Icon-76.png */,
 				146E9FF019D56EE100C3F6E6 /* Default-667h@2x.png */,
 				146E9FF119D56EE100C3F6E6 /* Default-736h@3x.png */,
 				146E9FF219D56EE100C3F6E6 /* Default-Landscape@3x.png */,
@@ -2654,8 +2662,8 @@
 			children = (
 				14DB1215164BEDC4001FE76B /* Wind.app */,
 				1490873517E375D700943DD2 /* ScriptTempProductName.app */,
-				14C9CB9619CEA55100095833 /* Wind copy.app */,
-				14C9CC6E19CEA58500095833 /* TestSkis copy.app */,
+				14C9CB9619CEA55100095833 /* TestSkis.app */,
+				14C9CC6E19CEA58500095833 /* TestSnow.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2760,7 +2768,7 @@
 			);
 			name = TestSkis;
 			productName = TabBarExTwo;
-			productReference = 14C9CB9619CEA55100095833 /* Wind copy.app */;
+			productReference = 14C9CB9619CEA55100095833 /* TestSkis.app */;
 			productType = "com.apple.product-type.application";
 		};
 		14C9CB9819CEA58500095833 /* TestSnow */ = {
@@ -2777,7 +2785,7 @@
 			);
 			name = TestSnow;
 			productName = TabBarExTwo;
-			productReference = 14C9CC6E19CEA58500095833 /* TestSkis copy.app */;
+			productReference = 14C9CC6E19CEA58500095833 /* TestSnow.app */;
 			productType = "com.apple.product-type.application";
 		};
 		14DB1158164BEDC3001FE76B /* Wind */ = {
@@ -2951,6 +2959,7 @@
 				14C9CAC819CEA55100095833 /* WASplashWebViewController_iPhone.xib in Resources */,
 				14C9CAC919CEA55100095833 /* globe@2x.png in Resources */,
 				14C9CACA19CEA55100095833 /* WASplashScreenViewController_iPad.xib in Resources */,
+				146E122519E9137C00506766 /* Icon-76.png in Resources */,
 				148C405919D310CB00D8A2FC /* Icon-512.png in Resources */,
 				14F41F9A19D2FCD6009E5312 /* button-prix-selected.png in Resources */,
 				14F41F8719D2FCD6009E5312 /* popoverShare.png in Resources */,
@@ -3040,6 +3049,7 @@
 				146E9FF519D56EE100C3F6E6 /* Default-Landscape@3x.png in Resources */,
 				14C9CAFE19CEA55100095833 /* top-list.png in Resources */,
 				148C406319D310CB00D8A2FC /* Default-Landscape@2x.png in Resources */,
+				146E122319E9137C00506766 /* Icon-76@2x.png in Resources */,
 				14F41F9B19D2FCD6009E5312 /* button-prix-unselected.png in Resources */,
 				14C9CAFF19CEA55100095833 /* calendar.png in Resources */,
 				14C9CB0019CEA55100095833 /* download@2x.png in Resources */,
@@ -3050,7 +3060,6 @@
 				14C9CB0119CEA55100095833 /* forward@2x.png in Resources */,
 				14F41F7A19D2FCD6009E5312 /* bouton_1_telecharger_IpadPortrait.png in Resources */,
 				14F41F7F19D2FCD6009E5312 /* popover-bkg.png in Resources */,
-				14F41F4619D2FCD6009E5312 /* Application.plist in Resources */,
 				14F41F7019D2FCD6009E5312 /* iphone-gamme-unselected.png in Resources */,
 				148C405C19D310CB00D8A2FC /* Icon@2x.png in Resources */,
 				14C9CB0219CEA55100095833 /* folder.png in Resources */,
@@ -3104,6 +3113,7 @@
 				14F41F7119D2FCD6009E5312 /* iphone-marque-selected.png in Resources */,
 				14C9CB1819CEA55100095833 /* Localizable.strings in Resources */,
 				148C406119D310CB00D8A2FC /* Default.png in Resources */,
+				146E122419E9137C00506766 /* Icon-60@2x.png in Resources */,
 				14F4218C19D302B2009E5312 /* Magazines.plist in Resources */,
 				14F41F7719D2FCD6009E5312 /* retour.png in Resources */,
 				14F41F8219D2FCD6009E5312 /* rt.png in Resources */,
@@ -4030,7 +4040,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "Wind copy";
+				PRODUCT_NAME = TestSkis;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4066,7 +4076,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "Wind copy";
+				PRODUCT_NAME = TestSkis;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4100,7 +4110,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "Wind copy";
+				PRODUCT_NAME = TestSkis;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -4136,7 +4146,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "TestSkis copy";
+				PRODUCT_NAME = TestSnow;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4172,7 +4182,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "TestSkis copy";
+				PRODUCT_NAME = TestSnow;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -4206,7 +4216,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "TestSkis copy";
+				PRODUCT_NAME = TestSnow;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
