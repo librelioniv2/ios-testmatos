@@ -815,6 +815,14 @@
 		14DB13A1164C52C4001FE76B /* wind_355.png in Resources */ = {isa = PBXBuildFile; fileRef = 14DB1381164C52C4001FE76B /* wind_355.png */; };
 		14E42D4A183BC5590062825A /* WAZippedHtmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E42D48183BC5590062825A /* WAZippedHtmlParser.m */; };
 		14E42D4B183BC5590062825A /* WAZippedHtmlParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 14E42D48183BC5590062825A /* WAZippedHtmlParser.m */; };
+		14E58B341A06009B0074C1ED /* Icon_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B301A06009B0074C1ED /* Icon_29.png */; };
+		14E58B351A06009B0074C1ED /* Icon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B311A06009B0074C1ED /* Icon_58.png */; };
+		14E58B361A06009B0074C1ED /* Icon_50.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B321A06009B0074C1ED /* Icon_50.png */; };
+		14E58B371A06009B0074C1ED /* Icon_100.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B331A06009B0074C1ED /* Icon_100.png */; };
+		14E58B3E1A0600E30074C1ED /* skieur_tests2014.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B3C1A0600E30074C1ED /* skieur_tests2014.png */; };
+		14E58B3F1A0600E30074C1ED /* skieur_tests2015.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B3D1A0600E30074C1ED /* skieur_tests2015.png */; };
+		14E58B421A0601040074C1ED /* snowsurf_tests2014.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B401A0601040074C1ED /* snowsurf_tests2014.png */; };
+		14E58B431A0601040074C1ED /* snowsurf_tests2015.png in Resources */ = {isa = PBXBuildFile; fileRef = 14E58B411A0601040074C1ED /* snowsurf_tests2015.png */; };
 		14F41F3619D2FCD6009E5312 /* WALeftViewIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F41ECC19D2FCD5009E5312 /* WALeftViewIphone.xib */; };
 		14F41F3719D2FCD6009E5312 /* Application_.plist in Resources */ = {isa = PBXBuildFile; fileRef = 14F41ECD19D2FCD5009E5312 /* Application_.plist */; };
 		14F41F3819D2FCD6009E5312 /* WAAdvancedSearchPopoverCellIpad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 14F41ECE19D2FCD5009E5312 /* WAAdvancedSearchPopoverCellIpad.xib */; };
@@ -1359,6 +1367,14 @@
 		14E3F4FE1266F33600F24CD6 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		14E42D47183BC5590062825A /* WAZippedHtmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WAZippedHtmlParser.h; sourceTree = "<group>"; };
 		14E42D48183BC5590062825A /* WAZippedHtmlParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WAZippedHtmlParser.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		14E58B301A06009B0074C1ED /* Icon_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_29.png; sourceTree = "<group>"; };
+		14E58B311A06009B0074C1ED /* Icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_58.png; sourceTree = "<group>"; };
+		14E58B321A06009B0074C1ED /* Icon_50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_50.png; sourceTree = "<group>"; };
+		14E58B331A06009B0074C1ED /* Icon_100.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_100.png; sourceTree = "<group>"; };
+		14E58B3C1A0600E30074C1ED /* skieur_tests2014.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skieur_tests2014.png; sourceTree = "<group>"; };
+		14E58B3D1A0600E30074C1ED /* skieur_tests2015.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = skieur_tests2015.png; sourceTree = "<group>"; };
+		14E58B401A0601040074C1ED /* snowsurf_tests2014.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snowsurf_tests2014.png; sourceTree = "<group>"; };
+		14E58B411A0601040074C1ED /* snowsurf_tests2015.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = snowsurf_tests2015.png; sourceTree = "<group>"; };
 		14EAEDDE1281C026000E7B74 /* WARSSItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WARSSItemCell.h; sourceTree = "<group>"; };
 		14EAEDDF1281C026000E7B74 /* WARSSItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WARSSItemCell.m; sourceTree = "<group>"; };
 		14EC923F145C32EE00FB25A1 /* WABarButtonItemWithLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WABarButtonItemWithLink.h; sourceTree = "<group>"; };
@@ -2387,6 +2403,8 @@
 		14F41DD719D2F159009E5312 /* Test Skis */ = {
 			isa = PBXGroup;
 			children = (
+				14E58B3C1A0600E30074C1ED /* skieur_tests2014.png */,
+				14E58B3D1A0600E30074C1ED /* skieur_tests2015.png */,
 				146E122019E9137C00506766 /* Icon-76@2x.png */,
 				146E122119E9137C00506766 /* Icon-60@2x.png */,
 				146E122219E9137C00506766 /* Icon-76.png */,
@@ -2507,6 +2525,12 @@
 		14F41FA019D2FE02009E5312 /* Test Snow */ = {
 			isa = PBXGroup;
 			children = (
+				14E58B401A0601040074C1ED /* snowsurf_tests2014.png */,
+				14E58B411A0601040074C1ED /* snowsurf_tests2015.png */,
+				14E58B301A06009B0074C1ED /* Icon_29.png */,
+				14E58B311A06009B0074C1ED /* Icon_58.png */,
+				14E58B321A06009B0074C1ED /* Icon_50.png */,
+				14E58B331A06009B0074C1ED /* Icon_100.png */,
 				146E9FEA19D56E9000C3F6E6 /* Default-736h@3x.png */,
 				146E9FEB19D56E9000C3F6E6 /* Default-Landscape@3x.png */,
 				146E9FEC19D56E9000C3F6E6 /* Default-667h@2x.png */,
@@ -2977,6 +3001,7 @@
 				14C9CAD019CEA55100095833 /* download.png in Resources */,
 				14F41F6519D2FCD6009E5312 /* WABuyBottonIphoneLandscape.plist in Resources */,
 				14F41F4019D2FCD6009E5312 /* WAPreviousSearchCellIphone.xib in Resources */,
+				14E58B3E1A0600E30074C1ED /* skieur_tests2014.png in Resources */,
 				14F41F4419D2FCD6009E5312 /* WASearchTableCellIpad.xib in Resources */,
 				14F41F9019D2FCD6009E5312 /* bout_aff-resultat.png in Resources */,
 				14C9CAD119CEA55100095833 /* info@2x.png in Resources */,
@@ -3105,6 +3130,7 @@
 				14F41F7B19D2FCD6009E5312 /* bouton_1_telecharger_IphoneLandscape.png in Resources */,
 				14C9CB1519CEA55100095833 /* video.png in Resources */,
 				14C9CB1619CEA55100095833 /* white.png in Resources */,
+				14E58B3F1A0600E30074C1ED /* skieur_tests2015.png in Resources */,
 				146E9FF419D56EE100C3F6E6 /* Default-736h@3x.png in Resources */,
 				14C9CB1719CEA55100095833 /* back.png in Resources */,
 				14F41F6319D2FCD6009E5312 /* WABuyBottonIpadLandscape.plist in Resources */,
@@ -3156,6 +3182,8 @@
 				14F4202F19D2FE05009E5312 /* Application_.plist in Resources */,
 				14F4214F19D30024009E5312 /* moins_G2.png in Resources */,
 				14C9CBA519CEA58500095833 /* rss@2x.png in Resources */,
+				14E58B361A06009B0074C1ED /* Icon_50.png in Resources */,
+				14E58B351A06009B0074C1ED /* Icon_58.png in Resources */,
 				14F4212C19D30024009E5312 /* WASharePopover.xib in Resources */,
 				14C9CBA619CEA58500095833 /* WALexiqueIphone.xib in Resources */,
 				14C9CBA719CEA58500095833 /* refresh@2x.png in Resources */,
@@ -3175,12 +3203,14 @@
 				14C9CBAE19CEA58500095833 /* info.png in Resources */,
 				14F4214D19D30024009E5312 /* iphone-prix-selected.png in Resources */,
 				14F4214A19D30024009E5312 /* figure-cambres-multiples.png in Resources */,
+				14E58B341A06009B0074C1ED /* Icon_29.png in Resources */,
 				14C9CBB619CEA58500095833 /* WATableSelectionIphone.xib in Resources */,
 				14C9CBBB19CEA58500095833 /* WATableSelectionIpad.xib in Resources */,
 				14F420B819D2FE05009E5312 /* Tabs.plist in Resources */,
 				14F4218819D30024009E5312 /* button-gamme-unselected.png in Resources */,
 				14F4215A19D30024009E5312 /* b.png in Resources */,
 				14F4212D19D30024009E5312 /* cambre_inverse.png in Resources */,
+				14E58B421A0601040074C1ED /* snowsurf_tests2014.png in Resources */,
 				148C407B19D3115100D8A2FC /* _ic_launcher.png in Resources */,
 				14F4217D19D30024009E5312 /* 2013_ech_11.png in Resources */,
 				14C9CBC019CEA58500095833 /* documents.png in Resources */,
@@ -3190,6 +3220,7 @@
 				14F4213B19D30024009E5312 /* WASearchTableCellIphone.xib in Resources */,
 				14C9CBC119CEA58500095833 /* documents@2x.png in Resources */,
 				148C407F19D3115100D8A2FC /* Icon@2x.png in Resources */,
+				14E58B371A06009B0074C1ED /* Icon_100.png in Resources */,
 				14F4214B19D30024009E5312 /* top-logo.png in Resources */,
 				14F4216319D30024009E5312 /* rt.png in Resources */,
 				148C407419D3115100D8A2FC /* Default-Landscape@2x.png in Resources */,
@@ -3290,6 +3321,7 @@
 				14C9CBE219CEA58500095833 /* Placeholder.png in Resources */,
 				14F4212B19D30024009E5312 /* bouton_1_telecharger_IphonePortrait.png in Resources */,
 				14C9CBE319CEA58500095833 /* WAResultsViewIpad.xib in Resources */,
+				14E58B431A0601040074C1ED /* snowsurf_tests2015.png in Resources */,
 				14F4213D19D30024009E5312 /* ico-snow-black.png in Resources */,
 				148C407A19D3115100D8A2FC /* Icon-72@2x.png in Resources */,
 				14F4218119D30024009E5312 /* 2013_ech_15.png in Resources */,
