@@ -304,7 +304,7 @@
 					return NO;
 				}
 				else{
-                        //SLog(@"Time for next check, last check %@, now %@",fileModifDate,nowDate);
+                        //SLog(@"Time for next check, last check %@, now %@, url:%@",fileModifDate,nowDate,urlString);
 						return YES;
 				}
 			}
@@ -342,7 +342,10 @@
             NSString * mainFilePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
             NSString * metadataPlistPath = [WAUtilities urlByChangingExtensionOfUrlString:mainFilePath toSuffix:@"_metadata.plist"];
             NSDictionary * metaDic = [NSDictionary dictionaryWithContentsOfFile:metadataPlistPath];
-            if (![metaDic objectForKey:@"DownloadComplete"]) return YES;
+            if (![metaDic objectForKey:@"DownloadComplete"]){
+                //SLog(@"No Download complete flag for url:%@",urlString);
+                return YES;
+            }
             else return NO;
             
             

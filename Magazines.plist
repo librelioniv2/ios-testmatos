@@ -4,7 +4,7 @@
 <array>
 	<dict>
 		<key>FileName</key>
-		<string>skieur_tests2014_.sqlite?wabbar=yes</string>
+		<string>skieur_tests2014.sqlite?wabbar=yes&amp;waupdate=30</string>
 		<key>Subtitle</key>
 		<string>Saison 2013-2014</string>
 		<key>Title</key>
