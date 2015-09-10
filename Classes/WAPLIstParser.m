@@ -16,19 +16,29 @@
 
 - (void) setUrlString: (NSString *) theString
 {
+
     urlString = [[NSString alloc]initWithString: theString];
-	NSString *plistName = [urlString noArgsPartOfUrlString];
+    //SLog(@"Will init parser %@ with UrlString %@",self, urlString);
+
+    NSString *plistName = [urlString noArgsPartOfUrlString];
 	NSString * plistPath = [[NSBundle mainBundle] pathOfFileWithUrl:plistName];
     //SLog(@"plistname:%@, plistpath:%@",plistName,plistPath);
-	dataArray = [[NSArray alloc ]initWithContentsOfFile:plistPath];
+	dataArray = [[NSMutableArray alloc ]initWithContentsOfFile:plistPath];
     //SLog(@"plist dataArray %@",dataArray);
     //If dataArray count is zero, it means that the root level of the plist is a dictionary, with a "Lines" key
     if(![dataArray count]){
         //SLog(@"dataArray count is null");
         [dataArray release];
-        dataArray = [[NSArray alloc ] initWithArray:[[NSDictionary dictionaryWithContentsOfFile:plistPath] valueForKey:@"Lines"]];
+        dataArray = [[NSMutableArray alloc ] initWithArray:[[NSDictionary dictionaryWithContentsOfFile:plistPath] valueForKey:@"Lines"]];
     }
     headerDic = [[NSDictionary alloc ] initWithDictionary:[[NSDictionary dictionaryWithContentsOfFile:plistPath] valueForKey:@"Headers"]];
+    
+    
+    //Check if we need to chache prices
+    NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
+     NSString * boolString = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"CachePrices"];
+    if (boolString) extraInfoStatus = Needed;
+    else extraInfoStatus = NotNeeded;
 	
  
     
@@ -38,10 +48,11 @@
 
 - (void)dealloc
 {
-	[urlString release];
+    //SLog(@"Will dealloc parser %@ with UrlString %@",self, urlString);
+
+    [urlString release];
 	[dataArray release];
-    [headerDic release];
-	
+   [headerDic release];
 	[super dealloc];
 }
 
@@ -59,9 +70,16 @@
     //SLog(@"tempDic %@",tempDic);
 	NSString * absUrlString = [WAUtilities absoluteUrlOfRelativeUrl:[tempDic objectForKey:@"FileName"] relativeToUrl:urlString] ;
 	NSString *noUnderscoreUrlString = [absUrlString urlByRemovingFinalUnderscoreInUrlString];//Remove the final underscore
+    
+    NSString * urlStringWithTitle = [absUrlString urlByAddingParameterInUrlStringWithKey:@"watitle" withValue:[tempDic objectForKey:@"Title"]];
+    urlStringWithTitle = [urlStringWithTitle urlByAddingParameterInUrlStringWithKey:@"wasubtitle" withValue:[tempDic objectForKey:@"Subtitle"]];//Add the wasubtitle arg to the url
+
+ 
+    NSString * buyUrlString = [urlStringWithTitle urlByChangingSchemeOfUrlStringToScheme:@"buy"];
+
 	NSString * ret = nil;
-
-
+    
+ 
 	switch (dataCol) {
 		case DataColTitle:
 			ret= [tempDic objectForKey:@"Title"];
@@ -70,7 +88,7 @@
 			ret= [tempDic objectForKey:@"Subtitle"];
 			break;
 		case DataColImage:{
-			NSString * imgUrl = [WAUtilities urlByChangingExtensionOfUrlString:noUnderscoreUrlString toSuffix:@".png"];
+			NSString * imgUrl = [noUnderscoreUrlString urlByChangingExtensionOfUrlStringToSuffix:@".png"];
 			NSString * imgPath = [[NSBundle mainBundle] pathOfFileWithUrl:imgUrl];
 			ret = imgPath;
 			break;}
@@ -125,20 +143,16 @@
 				if ([noUnderscoreUrlString isEqualToString:absUrlString]){
 					//This is a free file, return the url with the text "Free Download"
 					NSString * txt = [[NSBundle mainBundle]stringForKey:@"Free Download"];
-					ret = [NSString stringWithFormat:@"%@;%@",txt, absUrlString]; 					
+					ret = [NSString stringWithFormat:@"%@;%@",txt, urlStringWithTitle];
 				}
 				else {
 					//This is a paying file, return buy URL with  the text "Download ..."
 					NSString * txt = [[NSBundle mainBundle]stringForKey:@"Download ..."];
-					NSString * buyUrlString = [absUrlString urlByChangingSchemeOfUrlStringToScheme:@"buy"];
-					ret = [NSString stringWithFormat:@"%@;%@",txt,buyUrlString]; 					
+					ret = [NSString stringWithFormat:@"%@;%@",txt,buyUrlString];
 					
 				}
-				//Add the title and date to the url
-				ret = [ret urlByAddingParameterInUrlStringWithKey:@"watitle" withValue:[tempDic objectForKey:@"Title"]];//Get complete URL with title
-				ret = [ret urlByAddingParameterInUrlStringWithKey:@"wasubtitle" withValue:[tempDic objectForKey:@"Subtitle"]];//Add the wasubtitle arg to the url
-                ret = [ret urlByAddingParameterInUrlStringWithKey:@"wadate" withValue:[tempDic objectForKey:@"IssueDate"]];//Add the wadate arg to the url
-
+                
+ 
 			}
 			break;
 		}
@@ -206,9 +220,7 @@
                 }
                 else{**/
                     NSString * txt = [[NSBundle mainBundle]stringForKey:@"Read"];
-                    NSString * urlStringWithTitle = [absUrlString urlByAddingParameterInUrlStringWithKey:@"watitle" withValue:[tempDic objectForKey:@"Title"]];
-                    urlStringWithTitle = [urlStringWithTitle urlByAddingParameterInUrlStringWithKey:@"wasubtitle" withValue:[tempDic objectForKey:@"Subtitle"]];//Add the wasubtitle arg to the url
-                    ret = [NSString stringWithFormat:@"%@;%@",txt,urlStringWithTitle];
+                     ret = [NSString stringWithFormat:@"%@;%@",txt,urlStringWithTitle];
 
                 //}
                 
@@ -217,7 +229,66 @@
 				ret = nil;//File has not been downloaded, nothing to read!
 			}
 			break;
-		}
+        case DataColLogin:{
+            NSString * txt = [[NSBundle mainBundle]stringForKey:@"Log in"];
+           ret= [NSString stringWithFormat:@"%@;%@",txt,[buyUrlString urlByAddingParameterInUrlStringWithKey:@"walogin" withValue:@"-"]];
+            break;}
+        case DataColDownloadOrRead:{
+            ret= [self getDataAtRow:row forDataCol:DataColDownload];
+            if (!ret) ret = [self getDataAtRow:row forDataCol:DataColRead];
+            break;}
+        case DataColNewsstandCover:{
+            NSString * imgUrl = [noUnderscoreUrlString urlByChangingExtensionOfUrlStringToSuffix:@"_newsstand.png"];
+            NSString * imgPath = [[NSBundle mainBundle] pathOfFileWithUrl:imgUrl];
+            //SLog(@"Path for NS: %@ for url %@",imgPath,imgUrl);
+            ret = imgPath;
+            break;}
+        case DataColAd:
+            ret= [NSString stringWithFormat:@"ad://localhost/%@", [urlString nameOfFileWithoutExtensionOfUrlString]];
+            break;
+          case DataColDetail:
+            ret= [NSString stringWithFormat:@";detail://%i",row];
+            break;
+        case DataColDismiss:
+            ret= @";dismiss://";
+            break;
+        case  DataColUnitPrice:
+            if ([[NSBundle mainBundle] pathOfFileWithUrl:absUrlString]){
+                //File already downloaded, don't show price
+            }
+            else{
+                NSString * price = [tempDic objectForKey:@"Price"];
+                
+                if (price) ret = [NSString stringWithFormat:@"%@;%@",price,buyUrlString];
+            }
+            break;
+        case  DataColMonthlySubscriptionPrice:{
+            NSString * price = [tempDic objectForKey:@"MonthlySubscription"];
+            
+            if (price) ret = [NSString stringWithFormat:@"%@;%@",price,[buyUrlString urlByAddingParameterInUrlStringWithKey:@"waproductid" withValue:@"MonthlySubscription"]];
+        }
+            break;
+        case  DataColQuarterlySubscriptionPrice:{
+            NSString * price = [tempDic objectForKey:@"QuarterlySubscription"];
+            
+            if (price) ret = [NSString stringWithFormat:@"%@;%@",price,[buyUrlString urlByAddingParameterInUrlStringWithKey:@"waproductid" withValue:@"QuarterlySubscription"]];
+        }
+            break;
+        case  DataColHalfYearlySubscriptionPrice:{
+            NSString * price = [tempDic objectForKey:@"HalfYearlySubscription"];
+            
+            if (price) ret = [NSString stringWithFormat:@"%@;%@",price,[buyUrlString urlByAddingParameterInUrlStringWithKey:@"waproductid" withValue:@"HalfYearlySubscription"]];
+        }
+            break;
+        case  DataColYearlySubscriptionPrice:{
+            NSString * price = [tempDic objectForKey:@"YearlySubscription"];
+            
+            if (price) ret = [NSString stringWithFormat:@"%@;%@",price,[buyUrlString urlByAddingParameterInUrlStringWithKey:@"waproductid" withValue:@"YearlySubscription"]];
+        }
+            break;
+            
+        }
+            
 		default:
             if (dataCol>100.0) ret =[tempDic objectForKey:[NSString stringWithFormat:@"%@%i",@"Col",dataCol]];
 			
@@ -226,6 +297,7 @@
    	return ret;
 }
 - (int) countData{
+    //SLog(@"Will count data array: %@",dataArray);
 	return (int)[dataArray count];
 	
 }
@@ -236,6 +308,9 @@
 
 - (void) startCacheOperations{
     
+ 
+
+    
 }
 
 
@@ -245,12 +320,16 @@
 
 - (BOOL) shouldCompleteDownloadResources{
     return NO;
+    
 }
 
 
 
 - (NSString*) getHeaderForDataCol:(DataCol)dataCol{
-	return nil;
+ 	
+    
+    
+    return nil;
 	
 }
 
@@ -268,6 +347,11 @@
 
 - (NSArray*) getRessources{
     //SLog (@"Will get resources for plist parser");
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSString * boolString = [app_Dic objectForKey:@"DownloadNewstandCovers"];
+
+    BOOL downloadNewsstandCovers = NO;//Default value
+    if ([boolString isEqualToString: @"Yes"]) downloadNewsstandCovers = YES;
     NSString *plistName = [urlString noArgsPartOfUrlString];
     NSString * plistPath = [[NSBundle mainBundle] pathOfFileWithUrl:plistName];
     NSArray * tempArray = [NSArray arrayWithContentsOfFile:plistPath];
@@ -279,19 +363,142 @@
         NSString *pdfUrl = [dic objectForKey: @"FileName"];
         pdfUrl = [pdfUrl urlByRemovingFinalUnderscoreInUrlString];//Remove underscore
         pdfUrl = [WAUtilities absoluteUrlOfRelativeUrl:pdfUrl relativeToUrl:urlString];
-        NSString * coverUrl = [WAUtilities urlByChangingExtensionOfUrlString:pdfUrl toSuffix:@".png"];
+        pdfUrl = [pdfUrl stringByReplacingOccurrencesOfString:@"TempWa//" withString:@""];//hack
+        NSString * coverUrl = [pdfUrl urlByChangingExtensionOfUrlStringToSuffix:@".png"];
         [tempArray2 addObject:coverUrl];
-    }	
+        if (downloadNewsstandCovers){
+            //Add the newsstand cover only when specified in Application_.plist
+            NSString * newsstandCoverUrl = [pdfUrl urlByChangingExtensionOfUrlStringToSuffix:@"_newsstand.png"];
+            [tempArray2 addObject:newsstandCoverUrl];
+            
+        }
+    }
     
     return tempArray2;
 
 }
 
 - (CGFloat) cacheProgress{
+    //SLog(@"Cache finished %i",cacheFinished);
     return 1.0 ;
     
 }
 
+# pragma mark -
+# pragma mark SKProductsRequestDelegate
+
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
+{
+    
+    //SLog(@"Products received: valid %@ , invalid %@ urlString:%@",response.products,response.invalidProductIdentifiers,urlString);
+    extraInfoStatus = Downloaded;
+
+    //Parse response
+    NSArray * products = response.products;
+    NSMutableDictionary * parsedResponse = [NSMutableDictionary dictionary];
+    for (SKProduct *product in products) {
+        
+        //Format the price
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        [numberFormatter setLocale:product.priceLocale];
+        NSString *formattedPrice = [numberFormatter stringFromNumber:product.price];
+        [numberFormatter release];
+        //SLog(@"formattted price %@ for product id %@ to include in dic %@",formattedPrice,product.productIdentifier,parsedResponse);
+        
+        [parsedResponse setObject:formattedPrice forKey:product.productIdentifier];
+        
+     }
+    //SLog(@"parsedResponse:%@, dataarray:%@",parsedResponse,dataArray);
+    
+    //Add prices to plist
+    NSMutableArray * newDataArray= [NSMutableArray arrayWithArray:dataArray];
+    NSString * nullString = @"null";
+    NSOrderedSet * subscriptionIds = [nullString relevantLibrelioProductIDsForUrlString];//This will return subscription IDs
+
+    [dataArray enumerateObjectsUsingBlock:^(NSDictionary *dic, NSUInteger idx, BOOL *stop) {
+        //Find the unit price
+        NSString *pdfUrl = [dic objectForKey: @"FileName"];
+        NSString * librelioId = [[pdfUrl urlByRemovingFinalUnderscoreInUrlString] nameOfFileWithoutExtensionOfUrlString];
+        NSString * appStoreId = [librelioId appStoreProductIDForLibrelioProductID];
+        NSString * priceString = [parsedResponse objectForKey:appStoreId];
+        NSMutableDictionary * newDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        if (priceString)  [newDic setObject:priceString forKey:@"Price"];
+        for (NSString * subscriptionId in subscriptionIds){
+            NSString * appStoreSubscriptionId = [subscriptionId appStoreProductIDForLibrelioProductID];
+            NSString * subscriptionPriceString = [parsedResponse objectForKey:appStoreSubscriptionId];
+            if (subscriptionPriceString)  [newDic setObject:subscriptionPriceString forKey:subscriptionId];
+        }
+        [newDataArray replaceObjectAtIndex:idx withObject:newDic];
+        
+        //Add subscription ids
+        
+                                     
+
+    }];
+    [dataArray removeAllObjects];
+    [dataArray addObjectsFromArray:newDataArray];
+
+    
+      //SLog(@"dataarray:%@",dataArray);
+     //Store plist with metadata and list of resources for this download
+     NSString * filePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
+     [dataArray writeToFile:filePath atomically:YES];
+
+    
+    //fire notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didGetExtraInformation" object:urlString];
+
+    
+    
+}
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    
+    //SLog(@"Products not received: %@",error);
+    extraInfoStatus = Downloaded;
+    //fire notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didGetExtraInformation" object:urlString];
+   
+    
+}
+
+- (BOOL) shouldGetExtraInformation{
+    if (extraInfoStatus == Needed){
+        
+        //Start by adding subscriptions
+        NSString * nullString = @"null";
+        NSOrderedSet * acceptableLibrelioIDs = [nullString relevantLibrelioProductIDsForUrlString];//This will return subscription IDs
+        NSMutableSet * productIdentifiers = [NSMutableSet set];
+        for (NSString * curentID in acceptableLibrelioIDs){
+            NSString * appStoreID =  [curentID appStoreProductIDForLibrelioProductID];
+            [productIdentifiers addObject:appStoreID];
+        }
+
+        //Now add individual ids
+        for (NSDictionary * dic in dataArray){
+            NSString *pdfUrl = [dic objectForKey: @"FileName"];
+            NSString * librelioId = [[pdfUrl urlByRemovingFinalUnderscoreInUrlString] nameOfFileWithoutExtensionOfUrlString];
+            NSString * appStoreId = [librelioId appStoreProductIDForLibrelioProductID];
+            [productIdentifiers addObject:appStoreId];
+        }	
+
+         SKProductsRequest *request = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
+        
+        request.delegate = self;
+        extraInfoStatus = Requested;
+        //SLog(@"Will loaunch request %@",request );
+        [request start];
+        return YES;
+
+        
+        
+    }
+    else if (extraInfoStatus == Requested) return YES;
+    
+    else return NO;
+}
 
 
 

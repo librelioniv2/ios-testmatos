@@ -87,6 +87,7 @@
     //Check if parser returns an html string
     NSString * htmlString = [parser getDataAtRow:0 forDataCol:DataColHTML];
     NSString * urlToLoad = [parser getDataAtRow:0 forDataCol:DataColDetailLink];
+    //SLog(@"URLToLoad:%@",urlToLoad);
     if (htmlString){
         NSURL *baseURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathOfFileWithUrl:urlToLoad]];
         //SLog(@"Will load baseurl:%@ with html:%@",baseURL,htmlString);
@@ -115,6 +116,8 @@
                 
             }
             else{
+                //SLog(@"will load url:%@",baseURL);
+                
                 [self loadRequest:[NSURLRequest requestWithURL:baseURL]];
             }
         }
@@ -240,8 +243,14 @@
         [self toggleNavBarDidAsk];
         return NO;
     }
+    NSString *requestString = [[[request URL] absoluteString] stringByReplacingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+    ////SLog(requestString);
     
-    
+    if ([requestString hasPrefix:@"ios-log:"]) {
+        //NSString* logString = [[requestString componentsSeparatedByString:@":#iOS#"] objectAtIndex:1];
+        //SLog(@"UIWebView console: %@", logString);
+        return NO;
+    }
     if (waBase){
 		//We only filter clicked links
 		if (navigationType==UIWebViewNavigationTypeLinkClicked) {

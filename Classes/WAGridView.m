@@ -17,14 +17,14 @@
 
 @implementation WAGridView
 
-@synthesize parser,currentViewController,refreshControl;
+@synthesize parser,currentViewController,refreshControl,currentCollectionView;
 
 - (id)init {
+    //SLog(@"Will init covers");
     if (self = [super init]) {
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(moduleViewDidAppear) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishDownloadWithNotification:) name:@"didSucceedResourceDownload" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishDownloadWithNotification:) name:@"didFailIssueDownload" object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishDownloadWithNotification:) name:@"didSuccedIssueDownload" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSucceedResourceDownloadWithNotification:) name:@"didSucceedResourceDownload" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didSuccedIssueDownloadWithNotification:) name:@"didSuccedIssueDownload" object:nil];
         
         
         
@@ -41,70 +41,92 @@
 - (void) setUrlString: (NSString *) theString
 {
     //SLog(@"Will set urlString in GridView for %@ -",theString);
-    if (!urlString){
+    if (urlString) [urlString release];//Reinstantiate, to take new orientation into account
+        
         urlString = [[NSString alloc]initWithString: theString];
-        //Initial setup is needed
-        
-        
-        UIView * nibView = [UIView getNibView:[urlString nameOfFileWithoutExtensionOfUrlString] defaultNib:@"WAGridCell" forOrientation:999];
-        cellNibSize = nibView.frame.size;
-        //SLog(@"cellNibSize:%f,%f",nibView.frame.size.width,nibView.frame.size.height);
-        
-        self.delegate = self;//UITableView delegate
-        self.dataSource = self;//UITableViewDataSource delegate
-        self.rowHeight = cellNibSize.height+2*kVerticalMargin;
-        self.separatorStyle = UITableViewCellSeparatorStyleNone;
-        
-        
-        
-        
-        //Test if a background image was provided
-        NSString *bgUrlString = [[urlString nameOfFileWithoutExtensionOfUrlString] stringByAppendingString:@"_background.png"];
-        //SLog(@"bgUrlString:%@",bgUrlString);
-        NSString *bgPath = [[NSBundle mainBundle] pathOfFileWithUrl:bgUrlString];
-        if (bgPath){
-            UIImageView * background = [[UIImageView alloc] initWithFrame: self.bounds];
-            background.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-            background.contentMode = UIViewContentModeScaleAspectFill;
-            background.image = [UIImage imageWithContentsOfFile:bgPath];
-            self.backgroundView = background;
-            [background release];
-        }
-        
-        
-        //Tracking
-        NSString * viewString = [urlString gaScreenForModuleWithName:@"Library" withPage:nil];
-        // May return nil if a tracker has not already been initialized with a
-        // property ID.
-        id tracker = [[GAI sharedInstance] defaultTracker];
-        
-        // This screen name value will remain set on the tracker and sent with
-        // hits until it is set to a new value or to nil.
-        [tracker set:kGAIScreenName
-               value:viewString];
-        
-        [tracker send:[[GAIDictionaryBuilder createAppView] build]];
-        //Refresh
-        //Add refresh view if waupdate parameter was present
-        NSString * mnString = [urlString valueOfParameterInUrlStringforKey:@"waupdate"];
-        if (mnString){
-            
-            refreshControl = [[UIRefreshControl alloc] init];
-            refreshControl.backgroundColor = [UIColor whiteColor];
-            [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
-            [self addSubview:refreshControl];
-        }
-        
-        
-        
-        
-        
+    //Initial setup is needed
+    
+    self.separatorStyle = UITableViewCellSeparatorStyleNone;//We use a tableview because we want to have a refresh control, but we don't want it to be visible
+    
+    
+    UIInterfaceOrientation * currentOrientation = self.frame.size.height<self.frame.size.width?UIInterfaceOrientationLandscapeLeft:UIInterfaceOrientationPortrait;//This is needed for xibs
+    NSString * cellNibTestName = [[urlString nameOfFileWithoutExtensionOfUrlString]stringByAppendingString:@"_cell"];
+    NSString * cellNibName = [UIView getNibName:cellNibTestName defaultNib:@"WAGridCell" forOrientation:currentOrientation];
+    UIView * cellNibView = [UIView getNibView:cellNibTestName defaultNib:@"WAGridCell" forOrientation:currentOrientation];
+    cellNibSize = cellNibView.frame.size;
+    //SLog(@"cellNibSize:%f,%f",cellNibView.frame.size.width,cellNibView.frame.size.height);
+    
+    //Set header view
+    NSString * headerNibTestName = [[urlString nameOfFileWithoutExtensionOfUrlString]stringByAppendingString:@"_header"];
+    NSString * headerNibName = [UIView getNibName:headerNibTestName defaultNib:@"WAGridHeader" forOrientation:currentOrientation];
+    UIView * headerNibView = [UIView getNibView:headerNibTestName defaultNib:@"WAGridHeader" forOrientation:currentOrientation];
+    headerNibSize = headerNibView.frame.size;
+    if ([headerNibView viewWithTag:3]||[headerNibView viewWithTag:20]) rowInHeaderView=1; //If there is a cover in header nib, it means that header should contain first row
+    else rowInHeaderView=0;
+    
+    //Set collection view
+    UICollectionViewFlowLayout *layout=[[UICollectionViewFlowLayout alloc] init];
+    layout.sectionInset =  UIEdgeInsetsMake(30, 30, 30, 30);
+    currentCollectionView=[[UICollectionView alloc] initWithFrame:self.frame collectionViewLayout:layout];
+    currentCollectionView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    
+    [currentCollectionView setDataSource:self];
+    [currentCollectionView setDelegate:self];
+    
+    [currentCollectionView registerNib:[UINib nibWithNibName:cellNibName bundle:nil] forCellWithReuseIdentifier:@"cellIdentifier"];
+    [currentCollectionView registerNib:[UINib nibWithNibName:headerNibName bundle:nil] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerIdentifier"];
+    
+    //[currentCollectionView setBackgroundColor:[UIColor redColor]];
+    
+    
+    [self addSubview:currentCollectionView];
+    
+    
+    
+    //Test if a background image was provided
+    NSString *bgUrlString = [[urlString nameOfFileWithoutExtensionOfUrlString] stringByAppendingString:@"_background.png"];
+    //SLog(@"bgUrlString:%@",bgUrlString);
+    NSString *bgPath = [[NSBundle mainBundle] pathOfFileWithUrl:bgUrlString];
+    if (bgPath){
+        UIImageView * background = [[UIImageView alloc] initWithFrame: self.bounds];
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.image = [UIImage imageWithContentsOfFile:bgPath];
+        currentCollectionView.backgroundView = background;
+        [background release];
     }
-    else {
-        urlString = [[NSString alloc]initWithString: theString];
+    
+    
+    
+    //Tracking
+    NSString * viewString = [urlString gaScreenForModuleWithName:@"Library" withPage:nil];
+    // May return nil if a tracker has not already been initialized with a
+    // property ID.
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    
+    // This screen name value will remain set on the tracker and sent with
+    // hits until it is set to a new value or to nil.
+    [tracker set:kGAIScreenName
+           value:viewString];
+    
+    [tracker send:[[GAIDictionaryBuilder createAppView] build]];
+    //Refresh
+    //Add refresh view if waupdate parameter was present
+    NSString * mnString = [urlString valueOfParameterInUrlStringforKey:@"waupdate"];
+    if (mnString){
         
+        refreshControl = [[UIRefreshControl alloc] init];
+        refreshControl.backgroundColor = [UIColor whiteColor];
+        [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+        [self addSubview:refreshControl];
     }
-    [self initParser];
+    
+    
+    
+    
+    
+     [self initParser];
+ 
     
     
     
@@ -115,89 +137,66 @@
     Class theClass = NSClassFromString(className);
     parser =  (NSObject <WAParserProtocol> *)[[theClass alloc] init];
     parser.urlString = urlString;
+    //SLog(@"Did init parser %@ with count %i",parser,[parser countData]);
     
 }
 
 
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    //SLog(@"Number of sections: %i",[[layoutDic objectForKey:@"SectionViews" ]count]);
-    return 1;
+    //SLog(@"number of items %i",MAX(parser.countData-rowInHeaderView,0));
+    return MAX(parser.countData-rowInHeaderView,0);
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    int nbCols = [self numberofColumns];
-    int ret = floor(([parser countData]-1)/nbCols)+1;
-    //SLog(@"nbCol:%i,count:%i,ret:%i",nbCols,[parser countData],ret);
-    return (ret);
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-    NSString *CellIdentifier = [NSString stringWithFormat:@"Cell%f",self.frame.size.width];//This prevents the same cells to be used in portrait and landscape mode, which poses problems.
-    
-    
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    int nbCols = [self numberofColumns];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        //Calculate left margin
-        CGFloat leftMargin = (self.frame.size.width-nbCols*(cellNibSize.width+2*kHorizontalMargin))/2;
-        
-        //Add subviews
-        for (int i = 1; i <=nbCols; i++){
-            UIView * nibView = [UIView getNibView:[urlString nameOfFileWithoutExtensionOfUrlString] defaultNib:@"WAGridCell" forOrientation:999];
-            nibView.autoresizingMask = UIViewAutoresizingNone;
-            nibView.frame = CGRectMake(leftMargin+kHorizontalMargin+(i-1)*(cellNibSize.width+2*kHorizontalMargin), kVerticalMargin,nibView.frame.size.width,nibView.frame.size.height);
-            [cell.contentView addSubview:nibView];
-            nibView.tag = 1000+i;
-            
-            
-        }
-        
-        
+    UICollectionViewCell *cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cellIdentifier" forIndexPath:indexPath];
+    if (self.currentCollectionView.dragging == NO && self.currentCollectionView.decelerating == NO)
+    {
+        [cell populateNibWithParser:parser withButtonDelegate:self withController:currentViewController   displayingImages:YES forRow:(int)indexPath.row+1+rowInHeaderView];
     }
-    
-    cell.textLabel.hidden = YES;//Hide the standard textLabel view, otherwise our custom subviews get hiddeen
-    
-    for (int i = 1; i <=nbCols; i++){
-        UIView * nibView = [cell.contentView viewWithTag:1000+i];//Get  our Nib View
-        //SLog(@"Frame:%f,%f,%f,%f",nibView.frame.origin.x, nibView.frame.origin.y,nibView.frame.size.width,nibView.frame.size.height);
-        if ((indexPath.row*nbCols)+i<=[parser countData]){
-            [nibView populateNibWithParser:parser withButtonDelegate:self   forRow:(int)(indexPath.row*nbCols)+i];
-            [nibView setHidden:NO];
-        }
-        else{
-            [nibView setHidden:YES];
-        }
-        
-        
+    else {
+        [cell populateNibWithParser:parser withButtonDelegate:self withController:currentViewController   displayingImages:NO forRow:(int)indexPath.row+1+rowInHeaderView];
     }
+
     
-    
+    //SLog(@"handling cell %i",indexPath.row+1+rowInHeaderView);
+
     return cell;
-    
 }
 
 
+- (UICollectionReusableView *)collectionView: (UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    UICollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:
+                                         UICollectionElementKindSectionHeader withReuseIdentifier:@"headerIdentifier" forIndexPath:indexPath];
+    //SLog(@"indexPath for header %@",indexPath);
+    headerView.tag = 998; //convention
+    [headerView populateNibWithParser:parser withButtonDelegate:self withController:currentViewController displayingImages:YES forRow:rowInHeaderView];
+    return headerView;
+}
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return cellNibSize;
+}
 
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    return headerNibSize;
+}
 
 
 - (void) dealloc
 {
+    //SLog(@"Will start dealloc gridview %@ count %i",self, [parser countData]);
     [[NSNotificationCenter defaultCenter]removeObserver:self];
     [urlString release];
     [parser release];
     [refreshControl release];
+    [currentCollectionView release];
     [super dealloc];
+
 }
 
 #pragma mark -
@@ -206,7 +205,25 @@
 - (void)buttonAction:(id)sender{
     UIButton *button = (UIButton *)sender;
     NSString * newUrlString = [button titleForState:UIControlStateApplication];
-    [self openModule:newUrlString inView:button.superview inRect:button.frame];
+    NSString * absoluteUrlString = [WAUtilities absoluteUrlOfRelativeUrl:newUrlString relativeToUrl:urlString];
+    NSURL * url = [NSURL URLWithString:absoluteUrlString];
+    if ([url.scheme isEqualToString:@"detail"]){
+        int detailRow = [url.host intValue];
+        [self openDetailView:detailRow];
+        
+
+    }
+    else if ([url.scheme isEqualToString:@"dismiss"]){
+        [self dismissDetailView];
+    }
+    
+    
+    else {
+        [self openModule:newUrlString inView:button.superview inRect:button.frame];
+    }
+
+   //
+    
 }
 
 
@@ -219,6 +236,35 @@
     [moduleViewController pushViewControllerIfNeededAndLoadModuleView];
     [moduleViewController release];
 }
+                                         
+- (void) openDetailView:(int)detailRow{
+    //SLog(@"detailRow %i",detailRow);
+ 
+    UIInterfaceOrientation * currentOrientation = self.frame.size.height<self.frame.size.width?UIInterfaceOrientationLandscapeLeft:UIInterfaceOrientationPortrait;//This is needed for xibs
+ 
+    
+    NSString * modalNibTestName = [[urlString nameOfFileWithoutExtensionOfUrlString]stringByAppendingString:@"_modal"];
+    UIView * modalNibView = [UIView getNibView:modalNibTestName defaultNib:@"WAGridModal" forOrientation:currentOrientation];
+    //SLog(@"modalNibView %@",modalNibView);
+    
+    modalNibView.frame = self.frame;
+    modalNibView.tag = 789;//This is conventional
+    modalNibView.autoresizingMask = (UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin);
+    //SLog(@"Will add subview %@",modalNibView);
+    [self addSubview:modalNibView];
+    [modalNibView populateNibWithParser:parser withButtonDelegate:self withController:currentViewController   displayingImages:YES forRow:detailRow];
+
+
+    
+    
+   
+    
+}
+
+- (void) dismissDetailView{
+    UIView * modalView = [self viewWithTag:789];
+    [modalView removeFromSuperview];
+}
 
 
 
@@ -227,7 +273,7 @@
 
 - (void)moduleViewWillAppear:(BOOL)animated{
     
-    
+    //SLog(@"moduleView will appear %@ with parser count %i",self,[parser countData]);
     //Reset toolbar
     WAModuleViewController *vc = (WAModuleViewController *)[self firstAvailableUIViewController];
     //Reset toolbar
@@ -236,33 +282,11 @@
     
     
     //Add subscribe button if relevant
-    //First, check if the app offers subscriptions
-    NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
-    if (credentials){
-        NSString * sharedSecret = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"SharedSecret"];
-        NSString * userService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"UserService"];
-        //If the app offers subscriptions, either sharedSecret or userService should be set
-        if (sharedSecret||userService){
-            //Now check if subscriptions are already active
-            NSString * nodownloadUrlString = @"http://localhost/wanodownload.pdf";
-            NSString * receipt = [nodownloadUrlString receiptForUrlString];
-            if (receipt){
-                //SLog(@"receipt found:%@",receipt);
-                //Subscriptions are already active, don't show button
-            }
-            else{
-                //Add button
-                NSString * subscriptionAndSpaces = [NSString stringWithFormat:@"%@   ",[[NSBundle mainBundle]stringForKey:@"Subscription"]];
-                [vc addButtonWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace orImageNamed:@"" orString:subscriptionAndSpaces andLink:@"buy://localhost/wanodownload.pdf"];
-            }
-            
-            
-            
-            
-        }
-        
-        
-        
+    NSString * subscribeString = [WAUtilities subscribeString];
+    if (subscribeString){
+        NSString * subscriptionAndSpaces = [NSString stringWithFormat:@"%@   ",subscribeString];
+        [vc addButtonWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace orImageNamed:@"" orString:subscriptionAndSpaces andLink:@"buy://localhost/wanodownload.pdf"];
+
     }
     
     
@@ -275,10 +299,9 @@
     WAModuleViewController * moduleViewController = (WAModuleViewController *) [self traverseResponderChainForUIViewController];
     [moduleViewController checkUpdateIfNeeded];
     
-    //Update the table
-    [self initParser];
-    [self reloadData];
+    self.urlString = urlString;
     
+
     
     
 }
@@ -293,8 +316,7 @@
 
 - (void) moduleWillAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration{
     //Update the table
-    [self initParser];
-    [self reloadData];
+    self.urlString = urlString;
     
 }
 
@@ -304,31 +326,118 @@
 
 #pragma mark Notification handling methods
 
-- (void) didFinishDownloadWithNotification:(NSNotification *) notification{
+- (void) didSucceedIssueDownloadWithNotification:(NSNotification *) notification{
     
     NSString *notificatedUrl = notification.object;
     //SLog(@"notification.object:%@",notification.object);
     if ([notificatedUrl respondsToSelector:@selector(noArgsPartOfUrlString)]){
-        if ([[notificatedUrl noArgsPartOfUrlString]isEqualToString:[urlString noArgsPartOfUrlString]])     [self reloadData];
+        if ([[notificatedUrl noArgsPartOfUrlString]isEqualToString:[urlString noArgsPartOfUrlString]])
+            //SLog(@"Will reload dta");
+            [currentCollectionView reloadData];
     }
     
     [refreshControl endRefreshing];
     
 }
 
-#pragma mark Helper methods
-- (int) numberofColumns{
-    int ret = floor(self.frame.size.width/(cellNibSize.width+2*kHorizontalMargin));
-    return ret;
-    
+- (void) didSucceedResourceDownloadWithNotification:(NSNotification *) notification {
+    NSString *notificatedUrl = notification.object;
+    //SLog(@"notification.object:%@",notification.object);
+    if ([notificatedUrl respondsToSelector:@selector(noArgsPartOfUrlString)]){
+        
+        NSArray * visibleCells = [self.currentCollectionView visibleCells];
+        
+        //Refresh header if needed
+        if (rowInHeaderView){
+            NSString * imagePath1 = [parser getDataAtRow:rowInHeaderView forDataCol:DataColImage];
+            NSString * imagePath2 = [parser getDataAtRow:rowInHeaderView forDataCol:DataColNewsstandCover];
+            BOOL test1 = [imagePath1 isEqualToString:[[NSBundle mainBundle]pathOfFileWithUrl:notificatedUrl]];
+            BOOL test2 = [imagePath2 isEqualToString:[[NSBundle mainBundle]pathOfFileWithUrl:notificatedUrl]];
+            
+            if ((imagePath1||imagePath2)&& (test1||test2)){
+                //SLog(@"viewWithTag:%@",[self viewWithTag:998]);
+                [[self viewWithTag:998] populateNibWithParser:parser withButtonDelegate:self withController:currentViewController displayingImages:YES forRow:rowInHeaderView];
+                
+            }
+           
+        }
+        
+        //Refresh cells if needed
+        for (UICollectionViewCell* cell in visibleCells){
+            NSIndexPath * index = [self.currentCollectionView indexPathForCell:cell];
+            NSString * imagePath = [parser getDataAtRow:(int)index.row+1+rowInHeaderView forDataCol:DataColImage];
+            //SLog(@"image url: %@ relative to urlString %@",[parser getDataAtRow:(int)index.row+1 forDataCol:DataColImage],urlString);
+            //SLog(@"will compare: %@ & %@",imagePath,[[NSBundle mainBundle]pathOfFileWithUrl:notificatedUrl]);
+            if (imagePath&& [imagePath isEqualToString:[[NSBundle mainBundle]pathOfFileWithUrl:notificatedUrl]])
+            {
+                //SLog(@"Matches!");
+                [cell populateNibWithParser:parser withButtonDelegate:self withController:currentViewController   displayingImages:YES forRow:(int)index.row+1+rowInHeaderView];
+                [self.currentCollectionView reloadItemsAtIndexPaths:@[index]];
+                
+                
+            }
+            
+            
+        }
+    }
     
 }
+
+
+#pragma mark Helper methods
 - (void)refresh:(UIRefreshControl *)refreshControl {
     //[refreshControl endRefreshing];
+    //SLog(@"Will update in %@",self);
     WAModuleViewController *vc = (WAModuleViewController *)[self firstAvailableUIViewController];
     [vc checkUpdate:YES];
     
+    
 }
+
+- (void)loadImagesForOnscreenRows
+{
+    NSArray * visibleCells = [self.currentCollectionView visibleCells];
+    
+    
+    //Refresh cells if needed
+    for (UICollectionViewCell* cell in visibleCells){
+        NSIndexPath * index = [self.currentCollectionView indexPathForCell:cell];
+            [cell populateNibWithParser:parser withButtonDelegate:self withController:currentViewController   displayingImages:YES forRow:(int)index.row+1+rowInHeaderView];
+            [self.currentCollectionView reloadItemsAtIndexPaths:@[index]];
+            
+        
+        
+    }
+
+}
+
+
+#pragma mark - UIScrollViewDelegate
+
+// -------------------------------------------------------------------------------
+//	scrollViewDidEndDragging:willDecelerate:
+//  Load images for all onscreen rows when scrolling is finished.
+// -------------------------------------------------------------------------------
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate)
+    {
+        //SLog(@"did en dragging");
+        [self loadImagesForOnscreenRows];
+    }
+}
+
+// -------------------------------------------------------------------------------
+//	scrollViewDidEndDecelerating:scrollView
+//  When scrolling stops, proceed to load the app icons that are on screen.
+// -------------------------------------------------------------------------------
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    //SLog(@"did en decelerating");
+    [self loadImagesForOnscreenRows];
+
+}
+
 
 
 @end

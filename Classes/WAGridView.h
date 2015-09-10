@@ -8,18 +8,22 @@
 
 @class WAGridCell;
 
-@interface WAGridView : UITableView <UITableViewDelegate,UITableViewDataSource, UIGestureRecognizerDelegate,WAModuleProtocol>
+@interface WAGridView : UITableView <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate,WAModuleProtocol,UIScrollViewDelegate>
 {
 	NSString *urlString;
 	UIViewController* currentViewController;
 	NSObject <WAParserProtocol> * parser;
     CGSize cellNibSize;
+    CGSize headerNibSize;
+    int rowInHeaderView;
     UIRefreshControl *refreshControl;
+    UICollectionView * currentCollectionView;
 	
 }
 
 @property (nonatomic,retain) NSObject <WAParserProtocol> * parser;
 @property (nonatomic,retain) UIRefreshControl *refreshControl;
+@property (nonatomic,retain) UICollectionView * currentCollectionView;
 
 
 
@@ -30,9 +34,14 @@
 - (void) openModule:(NSString*)theUrlString inView:(UIView*)pageView inRect:(CGRect)rect;
 
 
-- (void) didFinishDownloadWithNotification:(NSNotification *) notification;
+- (void) didSucceedIssueDownloadWithNotification:(NSNotification *) notification;
+- (void) didSucceedResourceDownloadWithNotification:(NSNotification *) notification;
 
--(int)numberofColumns;
+- (void) openDetailView:(int)detailRow;
+- (void) dismissDetailView;
+
+- (void)loadImagesForOnscreenRows;
+
 
 @end
 

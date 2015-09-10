@@ -118,11 +118,18 @@
         }
         
         //Gesture recognizers
-		UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-		singleTapGestureRecognizer.numberOfTapsRequired = 1;
-		singleTapGestureRecognizer.delegate = self;
-		[self addGestureRecognizer:singleTapGestureRecognizer];
-		[singleTapGestureRecognizer release];
+        if ([[urlString valueOfParameterInUrlStringforKey:@"watoggle"] isEqualToString:@"no"]){
+            //Do nothing
+        }
+        else{
+            //Add gesture recognizer to toggle between full screen and small
+            UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+            singleTapGestureRecognizer.numberOfTapsRequired = 1;
+            singleTapGestureRecognizer.delegate = self;
+            [self addGestureRecognizer:singleTapGestureRecognizer];
+            [singleTapGestureRecognizer release];
+            
+        }
 
 
     }
@@ -192,7 +199,7 @@
 
 - (void)handleSingleTap:(UITapGestureRecognizer *)recognizer {
     if ([self isRootModule]){
-        [[self firstAvailableUIViewController]  dismissModalViewControllerAnimated:YES];
+        [[self firstAvailableUIViewController]  dismissViewControllerAnimated:YES completion:nil];
     }
     else{
        	WAModuleViewController * moduleViewController = [[WAModuleViewController alloc]init];

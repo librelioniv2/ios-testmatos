@@ -1,30 +1,30 @@
 //  Copyright 2011 WidgetAvenue - Librelio. All rights reserved.
 
 #import <UIKit/UIKit.h>
-#import "WAPaymentTransactionObserver.h"	
+#import "WAPaymentTransactionObserver.h"
 #import "WAPListParser.h"
-#import "EAAppSubDelegate.h"
+#import "WAAppSubDelegate.h"
 
-#import "WASplashScreenViewController.h"
-#import "WARootViewController.h"
-
+@import GoogleMobileAds;
 
 
-@interface WAAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate> {
-	UIWindow *window;
-	WARootViewController *appTabBarController;
-    WASplashScreenViewController * splashScreenViewController;
-	WAPaymentTransactionObserver *observer;
-    EAAppSubDelegate * apnsSubDelegate;
+
+
+@interface WAAppDelegate : NSObject <UIApplicationDelegate, UITabBarControllerDelegate,GADInterstitialDelegate> {
+    UIWindow *window;
+    UIViewController *rootViewController;
+    GADInterstitial * startInterstitial;
+    WAPaymentTransactionObserver *observer;
+    WAAppSubDelegate * apnsSubDelegate;
     NSMetadataQuery * metadataQuery;
-
-
+    
+    
 }
 
 @property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, retain) UITabBarController *appTabBarController;
-@property (nonatomic, retain) WASplashScreenViewController * splashScreenViewController;
-@property (nonatomic, retain) EAAppSubDelegate * apnsSubDelegate;
+@property (nonatomic, retain) UITabBarController *rootViewController;
+@property (nonatomic, retain) GADInterstitial * startInterstitial;
+@property (nonatomic, retain) WAAppSubDelegate * apnsSubDelegate;
 @property (nonatomic, retain) NSMetadataQuery * metadataQuery;
 
 
@@ -32,7 +32,7 @@
 /**
  * @brief: Builds or update the root view controller (tab view)
  **/
-- (void) updateRootViewController;
+- (void) createRootViewController;
 
 /**
  * @brief: Adds a view controller to the tab views

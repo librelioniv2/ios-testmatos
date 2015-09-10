@@ -89,7 +89,7 @@
 
 	UIView * nibView = [[cell.contentView subviews]objectAtIndex:0];//Get  our Nib View
 	
-	[nibView populateNibWithParser:parser withButtonDelegate:self   forRow:(int)indexPath.row+1];
+	[nibView populateNibWithParser:parser withButtonDelegate:self withController:currentViewController displayingImages:YES forRow:(int)indexPath.row+1];
 	
 	
     return cell;
@@ -122,7 +122,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	int row = (int)indexPath.row+1;
 	NSString * newUrlString = [parser getDataAtRow:row forDataCol:DataColDetailLink];
-	
+	//Change url if file is a package
+    
+    newUrlString = [newUrlString urlOfMainFileOfPackageWithUrlString];
+    
 	WAModuleViewController * loadingViewController = [[WAModuleViewController alloc]init];
 	loadingViewController.moduleUrlString= [WAUtilities absoluteUrlOfRelativeUrl:newUrlString relativeToUrl:urlString] ;
     //SLog(@"Should load %@",[WAUtilities absoluteUrlOfRelativeUrl:newUrlString relativeToUrl:urlString]);
@@ -150,7 +153,7 @@
         
         //Conventionally, the message html file has the same name as the main file, with the html extension; find the corresponding url;
         NSString * htmlMessageUrl = [[urlString noArgsPartOfUrlString] urlByChangingSchemeOfUrlStringToScheme:@"http"];
-        htmlMessageUrl = [WAUtilities urlByChangingExtensionOfUrlString:htmlMessageUrl toSuffix:@".html?warect=self"];
+        htmlMessageUrl = [htmlMessageUrl urlByChangingExtensionOfUrlStringToSuffix:@".html?warect=self"];
         //Check if html file exists locally
         if ([[NSBundle mainBundle] pathOfFileWithUrl:htmlMessageUrl]){
             WAModuleViewController * moduleViewController = [[WAModuleViewController alloc]init];

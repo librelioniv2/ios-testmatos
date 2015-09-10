@@ -38,9 +38,10 @@
 
     [self downloadMainFile];
     
-    //Add observer
+    //Add observers for cache
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEndDrawPageOperationWithNotification:) name:@"didEndDrawPageOperation" object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didGetExtraInformationWithNotification:) name:@"didGetExtraInformation" object:nil];
 
     
 }
@@ -49,8 +50,11 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     [parser cancelCacheOperations];
-    
+    //SLog(@"Will release parser %@ from downloader %@ for urlString %@",parser,self,urlString);
+   
     [parser release];
+    //SLog(@"Did release parser  from downloader %@ for urlString %@",self,urlString);
+
 	[currentUrlString release];
 	[filesize release];
 	[urlString release];
@@ -113,6 +117,7 @@
     NSDictionary * userInfo = error.userInfo;
     NSString * httpStatus = [NSString stringWithFormat:@"%@",[userInfo objectForKey:@"SSErrorHTTPStatusCodeKey"]];
     //SLog(@"Status %@",httpStatus);
+    
 	//If a 304 status code is received, trigger didReceiveNotModifiedHeaderForConnection
 	if ([httpStatus isEqualToString:@"304"]){
         [self didReceiveNotModifiedHeaderForConnection:connection];
@@ -122,7 +127,8 @@
 	//If a 403 status code is received, trigger didReceiveAuthenticationChallenge
 	//if ([response statusCode]==403) [self didReceiveAuthenticationChallenge:nil forConnection:connection];
     if ([httpStatus isEqualToString:@"403"]){
-        [self connection:connection didReceiveAuthenticationChallenge:nil];
+        NSURLAuthenticationChallenge * challengeNul;
+        [self connection:connection didReceiveAuthenticationChallenge:challengeNul];
         return;
     }
 	
@@ -152,12 +158,29 @@
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Password"];
     }
     
-    //Temporary: If a status code 462 is returned, wipe credentials so that issue can be bought
+    //If a status code 462 is returned, wipe credentials or store invalid receiptso that issue can be bought
 	if ([httpStatus isEqualToString:@"462"]){
 		[connection cancel];
+        
+        //Wipe credentials
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Subscription-code"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Username"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"Password"];
+        
+        //Store invalid receipt
+        NSString * connectionUrlString = [[[connection originalRequest] URL] absoluteString];
+        NSString * connectionReceipt = [connectionUrlString valueOfParameterInUrlStringforKey:@"receipt"];
+        NSString * productUrlString = [connectionUrlString valueOfParameterInUrlStringforKey:@"urlstring"];
+        NSString * shortID = [productUrlString nameOfFileWithoutExtensionOfUrlString];
+        //SLog(@"invalid receipt for %@:%@",shortID,connectionReceipt);
+        if (shortID && connectionReceipt) {
+            NSString *tempKey = [NSString stringWithFormat:@"%@-invalidreceipt",shortID];
+            [[NSUserDefaults standardUserDefaults] setObject:connectionReceipt forKey:tempKey];
+        }
+       
+        
+
+        
     }
     
      
@@ -305,9 +328,10 @@
     NSString * className = [tempUrlString classNameOfParserOfUrlString];
     Class theClass = NSClassFromString(className);
     parser =  (NSObject <WAParserProtocol> *)[[theClass alloc] init];
+    //SLog(@"Init parser %@ from %@",parser,self);
     parser.urlString = tempUrlString;
     
-    //SLog(@"parser count data:%i for Url:%@",[parser countData],tempUrlString);
+    //SLog(@"parser count data:%i for Url:%@ for parser:%@",[parser countData],tempUrlString,parser);
     if (!([parser countData]>0)){
         //SLog(@"File corrupted: %@",tempUrlString);
         //The file is corrupted, let us notify an error
@@ -368,10 +392,9 @@
         //SLog(@"MutableRessources:%@",nnewResourcesArray);
 		[self downloadNextResource];//Start looping in newResourcesArray
 	}
-	else {
+	else  {
         //SLog(@"Launch didDownloadAllResources from didDownloadMainFile");
         currentUrlString = nil;//This is important because there is a test in didEndDrawPageOperationWithNotification
-         [[[WADocumentDownloadsManager sharedManager] issuesQueue] removeObjectIdenticalTo:self];//Remove self from issuesQueue now, because WAMissingResourecesDwnloader may need to add itself again immediately after
 		[self didDownloadAllResources];//No resources to download now
 	}
     
@@ -419,14 +442,19 @@
 }
 - (void) didDownloadAllResources{	
     
-    //Check if some extra caching operations are required
+    //Check if some extra caching operations or extra information are required
     currentProgress = [parser cacheProgress];
     //SLog(@"Current progress in did: %f", currentProgress);
-    if (currentProgress<0.99){
-        //We still need to wait for cache operations
+    if ((currentProgress<0.99)||([parser shouldGetExtraInformation])){
+        //We still need to wait for cache operations or extra info
         currentMessage = [[NSString alloc]initWithString: [[NSBundle mainBundle]stringForKey:@"Caching operation in progress"]];
         
      }
+    
+    if ([parser shouldGetExtraInformation]){
+        //Do nothing, keep waiting, we will be notified
+    }
+
     else{
         
         //SLog(@"Did really download all resources");
@@ -456,7 +484,7 @@
         
         //Store plist with metadata and list of resources for this download
         NSString * mainFilePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
-        NSString * plistPath = [WAUtilities urlByChangingExtensionOfUrlString:mainFilePath toSuffix:@"_metadata.plist"];
+        NSString * plistPath = [mainFilePath urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
         NSMutableDictionary * metaDic = [NSMutableDictionary dictionary];
         if (nnewResourcesArray) [metaDic setObject:nnewResourcesArray forKey:@"Resources"];
         [metaDic setObject:[NSDate date] forKey:@"DownloadDate"];
@@ -472,7 +500,7 @@
         NSString * noUnderscoreUrlPath = [[NSBundle mainBundle] pathOfFileWithUrl:noUnderscoreUrlString];//Check the path of the file without underscore
         if (noUnderscoreUrlPath&&(![mainFilePath isEqualToString:noUnderscoreUrlPath])){
             [[NSFileManager defaultManager]removeItemAtPath:noUnderscoreUrlPath error:NULL];//delete the no underscore file if it exists, and is not the same as the just downloaded file
-            NSString * noUnderscorePlistPath = [WAUtilities urlByChangingExtensionOfUrlString:noUnderscoreUrlPath toSuffix:@"_metadata.plist"];
+            NSString * noUnderscorePlistPath = [noUnderscoreUrlPath urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
             [[NSFileManager defaultManager]removeItemAtPath:noUnderscorePlistPath error:NULL];//delete the metadata plist
             //Delete cache
             NSString * cacheUrlString = [noUnderscoreUrlString urlOfCacheFileWithName:@""];
@@ -483,13 +511,10 @@
             
            
         }
+        [self willDealloc];//This is used by certain subclasses
         
-        
-        
-                
-        [self notifyDownloadFinished];
-        //SLog(@"Did download all resourcs");
-        [[[WADocumentDownloadsManager sharedManager] issuesQueue] removeObjectIdenticalTo:self];//This will release this instance if not owned by a download view
+        [[WADocumentDownloadsManager sharedManager] removeDownloader:self withUrlString:urlString];
+
 
         
         
@@ -500,11 +525,22 @@
  	
 }
 
-- (void) notifyDownloadFinished{
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSucceedIssueDownload" object:urlString];
+- (void) willDealloc{
     
 }
 
+
+- (void) didGetExtraInformationWithNotification:(NSNotification *) notification{
+    
+    //SLog(@"didGetExtraInformationWithNotification %@ %@",self,urlString);
+
+    //[[[WADocumentDownloadsManager sharedManager] issuesQueue] removeObjectIdenticalTo:self];//Remove self from issuesQueue now, because WAMissingResourecesDwnloader may need to add itself again immediately after
+
+    
+    //Trigger didDownloadAllResources again
+    [self didDownloadAllResources];
+
+}
 
 - (void) didEndDrawPageOperationWithNotification:(NSNotification *) notification{
     if ([currentUrlString isEqual:urlString]){
@@ -555,7 +591,7 @@
 
     
 	NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:urlRequest  delegate:self];
-    //SLog(@"will launch connection for %@ with connexion %@",completeUrl,conn);
+    //SLog(@"will launch connection for %@ with connexion %@ in Downloader %@",completeUrl,conn,self);
     
 	//Add connection to download queue
 	[[[WAFileDownloadsManager sharedManager] downloadQueue] addObject:conn];

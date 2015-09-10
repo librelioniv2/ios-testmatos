@@ -68,6 +68,7 @@
         
         
         //If the resource is not present on the device, add it to the download queue
+        //TODO
         if ((![tempArray containsObject:absUrl])&&(![[NSBundle mainBundle]pathOfFileWithUrl:absUrl])) [tempArray addObject:absUrl];
         
     }
@@ -87,7 +88,7 @@
 	else {
         //Update the metadata plist to reflect the fact that download is complete
         NSString * mainFilePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
-        NSString * plistPath = [WAUtilities urlByChangingExtensionOfUrlString:mainFilePath toSuffix:@"_metadata.plist"];
+        NSString * plistPath = [mainFilePath urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
         NSMutableDictionary * metaDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
         //SLog(@"Will set downloadcomplete");
         [metaDic setObject:@"YES" forKey:@"DownloadComplete"];
@@ -109,7 +110,7 @@
     
     //Update metadata plist
     NSString * mainFilePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
-    NSString * plistPath = [WAUtilities urlByChangingExtensionOfUrlString:mainFilePath toSuffix:@"_metadata.plist"];
+    NSString * plistPath = [mainFilePath urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
     
      if (nnewResourcesArray){
          NSMutableDictionary * metaDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
@@ -150,8 +151,8 @@
 
     
        
-    //SLog(@"Will send didSucceedResourceDownload notification for connection %@",connection); 
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSucceedResourceDownload" object:urlString];
+    //SLog(@"Will send didSucceedResourceDownload notification for connection %@",connection);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"didSucceedResourceDownload" object:currentUrlString];
 
 	
     

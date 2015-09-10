@@ -21,8 +21,11 @@
 - (NSString *) pathOfStorageForUrlString;
 - (NSString *) urlOfUnzippedFolder;
 - (NSString*) urlOfCacheFileWithName:(NSString*)fileName;
+- (NSString*) urlByChangingExtensionOfUrlStringToSuffix:(NSString*)newSuffix;
 - (NSString*) urlByChangingSchemeOfUrlStringToScheme:(NSString*)newScheme;
+- (NSString*) urlBySubstitutingHyphensWithResolutionForOrientation:(UIInterfaceOrientation)orientation;
 - (NSString*) urlByRemovingFinalUnderscoreInUrlString;
+- (NSString*) urlOfMainFileOfPackageWithUrlString;
 - (BOOL) isUrlStringOfSameFileAsUrlString:(NSString*) otherUrlString;
 - (NSString *) valueOfParameterInUrlStringforKey:(NSString*)key;
 - (NSString *) urlByAddingParameterInUrlStringWithKey:(NSString*)key withValue:(NSString*)value;
@@ -32,13 +35,20 @@
 - (NSString*) classNameOfParserOfUrlString;
 - (BOOL) shouldUseNewsstandForUrlString;
 
-- (NSSet*) relevantSKProductIDsForUrlString;
-- (NSString *) titleWithSubscriptionLengthForId:(NSString*)theId;
+- (NSString*) appStoreProductIDForLibrelioProductID;
+- (NSString*) librelioProductIDForAppStoreProductID;
+
+- (NSOrderedSet*) relevantLibrelioProductIDsForUrlString;
+- (NSString *) titleWithSubscriptionLengthForAppStoreProductId:(NSString*)theId;
 
 /**
  Checks wether the product corresponding to urlString has already been purchased or if there is an active subscription; returns the corresponding receipt if yes
  */
 - (NSString*) receiptForUrlString;
+
+
+- (NSString*) completeAdUnitCodeForShortCode:(NSString*)shortAdUnitCode;
+
 
 
 /**
@@ -56,7 +66,8 @@
 
 - (NSString*) gaScreenForModuleWithName:(NSString*)moduleName withPage:(NSString*)pageName;
 
-- (NSString *)device;
-+ (NSString *)orientation;
+
+- (NSString *)stringFormattedRTF;
+- (NSString*)stringWithRTFHeaderAndFooter;
 
 @end

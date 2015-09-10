@@ -27,8 +27,8 @@
     //Prepare the xml for parsing
     NSString * fileName = [urlString nameOfFileWithoutExtensionOfUrlString];
     NSString * xmlUrl = [NSString stringWithFormat:@"%@/Assets/%@_oam.xml",unzippedFolderUrlString,fileName];
-    //NSString * xmlUrl = @"/facebook.atom";
-    NSData * xmlData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:xmlUrl]];
+    //SLog(@"xmlUrl: %@",xmlUrl);
+     NSData * xmlData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:xmlUrl]];
     //SLog(@"Read NSData for path %@ with length %i",[[NSBundle mainBundle] pathOfFileWithUrl:xmlUrl],xmlData.length);
 	doc = xmlReadMemory([xmlData bytes], (int)[xmlData length], "", NULL, HTML_PARSE_NOWARNING | HTML_PARSE_NOERROR);
 	xpathCtx = xmlXPathNewContext(doc);
@@ -171,6 +171,11 @@
     
 	return ret;
 	
+}
+
+- (BOOL) shouldGetExtraInformation{
+    
+    return NO;
 }
 
 

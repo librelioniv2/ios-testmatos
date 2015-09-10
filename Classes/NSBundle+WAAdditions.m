@@ -48,7 +48,7 @@
 	NSString *deviceName = [WAUtilities isBigScreen] ? @"ipad" : @"iphone";
 	NSString * extension = [filePath pathExtension];	
 	NSString *suffix = [NSString stringWithFormat:@"~%@.%@",deviceName,extension];
-	NSString *filePathWithDeviceSuffix = [WAUtilities urlByChangingExtensionOfUrlString:filePath toSuffix:suffix];
+	NSString *filePathWithDeviceSuffix = [filePath urlByChangingExtensionOfUrlStringToSuffix:suffix];
     
     //Build names with orientation (and device) suffixes
     NSString * filePathWithOrientationSuffix;
@@ -60,7 +60,8 @@
         NSString * orientationString=@"";
         switch (orientation) {
             case UIInterfaceOrientationPortrait:
-            case UIInterfaceOrientationPortraitUpsideDown:{
+            case UIInterfaceOrientationPortraitUpsideDown:
+            case UIInterfaceOrientationUnknown:{
                 orientationString = @"Portrait";
                 break;
             }
@@ -71,8 +72,8 @@
             }
         }
          //SLog(@"File path:%@ orientation:%@ ext:%@",filePath, orientationString,extension);
-        filePathWithOrientationSuffix = [WAUtilities urlByChangingExtensionOfUrlString:filePath toSuffix:[NSString stringWithFormat:@"-%@.%@",orientationString,extension]];
-        filePathWithOrientationAndDeviceSuffix = [WAUtilities urlByChangingExtensionOfUrlString:filePath toSuffix:[NSString stringWithFormat:@"-%@~%@.%@",orientationString,deviceName,extension]];
+        filePathWithOrientationSuffix = [filePath urlByChangingExtensionOfUrlStringToSuffix:[NSString stringWithFormat:@"-%@.%@",orientationString,extension]];
+        filePathWithOrientationAndDeviceSuffix = [filePath urlByChangingExtensionOfUrlStringToSuffix:[NSString stringWithFormat:@"-%@~%@.%@",orientationString,deviceName,extension]];
          //SLog(@"filePathWithOrientationAndDeviceSuffix:%@",filePathWithOrientationAndDeviceSuffix);
     }
     
@@ -102,8 +103,10 @@
 	//Now, check the ROOT LEVEL in the bundle directory
     if ((int)orientation!=999)//999 code conventionally means we do not care about orientation
     {
-        NSString *filePathWithOrientationAndDeviceInBundle = [[[NSBundle mainBundle]bundlePath] stringByAppendingPathComponent:[filePathWithOrientationAndDeviceSuffix lastPathComponent]]; 
+        NSString *filePathWithOrientationAndDeviceInBundle = [[[NSBundle mainBundle]bundlePath] stringByAppendingPathComponent:[filePathWithOrientationAndDeviceSuffix lastPathComponent]];
+        //SLog(@"filePathWithOrientationAndDeviceInBundle %@",filePathWithOrientationAndDeviceInBundle);
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePathWithOrientationAndDeviceInBundle]) 	{
+            //SLog(@"Should return device + or");
             return filePathWithOrientationAndDeviceInBundle;
         }
         NSString *filePathWithOrientationInBundle = [[[NSBundle mainBundle]bundlePath] stringByAppendingPathComponent:[filePathWithOrientationSuffix lastPathComponent]]; 
@@ -164,12 +167,44 @@
     
 }
 
+- (NSString *) getLibrelioAppId{
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSString * appShortId = [app_Dic objectForKey:@"LibrelioAppId"];
+    if(!appShortId){
+        NSString * appLongId = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"];
+        NSArray *parts = [appLongId componentsSeparatedByString:@"."];
+        appShortId = [parts objectAtIndex:[parts count]-1];
+    }
+    
+    return appShortId;
+    
+}
+
+- (NSString *) getLibrelioClientId{
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSString * clientShortId = [app_Dic objectForKey:@"LibrelioClientId"];
+    if(!clientShortId){
+        NSString * appLongId = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"];
+        NSArray *parts = [appLongId componentsSeparatedByString:@"."];
+        clientShortId = [parts objectAtIndex:[parts count]-2];
+        if ([clientShortId isEqualToString:@"widgetavenue"]) clientShortId = @"librelio";//this is for back compatibility reasons
+        
+        
+    }
+    
+    return clientShortId;
+    
+}
+
+
 - (int) countNumberOfReferencesForResourceWithUrlString:(NSString*) urlString {
     
     //TODO
     
     return 1;//Temporary
 }
+
+
 
 
 @end

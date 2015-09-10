@@ -43,12 +43,15 @@
 
 
     NSString * receipt = [urlString receiptForUrlString];
+    
+    NSString * login = [urlString valueOfParameterInUrlStringforKey:@"walogin"];
+
 	
     if (receipt){
 		//We have a receipt, proceed to download
 		[self startDownloadOrCheckCredentials];
 	}
-	else if ([WAUtilities featuresInApps]) {
+	else if ([WAUtilities featuresInApps]&&!login) {
         //The app has in app purchases, fetch list of relevant products (single or subscriptions)
         [self requestProducts];
 
@@ -108,90 +111,110 @@
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
+     
     [[SHKActivityIndicator currentIndicator] hide];
 
     NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
     
-	//Create actionSheet
-    NSString * theTitle = [[NSBundle mainBundle]stringForKey:@"What do you want to buy?"];
-    NSString * customTitle = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"TextForBuyTitle"];
-     if (customTitle) theTitle = [[NSBundle mainBundle]stringForKey:customTitle];
     
-	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:theTitle
-															 delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil 
-													otherButtonTitles:nil]; 
-	
-	
-	//Parse response
-	products = [[NSArray alloc] initWithArray: response.products];
-	for (SKProduct *product in products) {
-		//SLog(@"Product received:%@",product);
-        
-        //Format the price
-		NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-		[numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
-		[numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-		[numberFormatter setLocale:product.priceLocale];
-		NSString *formattedString = [numberFormatter stringFromNumber:product.price];
-		[numberFormatter release];
-        
-        //Append duration to description if needed
-        NSString * completeTitle = [product.localizedTitle titleWithSubscriptionLengthForId:product.productIdentifier] ;
-        
-		[actionSheet addButtonWithTitle:[NSString stringWithFormat:@"%@: %@",completeTitle, formattedString]];
-		
-		
-		;
-	}
-	//Add a Restore my purchases button
-	 NSString * locTitle0 = [[NSBundle mainBundle]stringForKey:@"Restore my purchases"];//This is the default title
-    [actionSheet addButtonWithTitle:locTitle0];
-	
-	//Add a Code Enter button in case we have a CodeService key in Application_.plist
-	NSString * codeService = nil ;
-	if (credentials) codeService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"CodeService"];
-	if (codeService) {
-        //SLog(@"Code Hash:%@",codeHash);
-        subscriberCodeTitle = [[NSBundle mainBundle]stringForKey:@"I have a subscriber code"];
-        [actionSheet addButtonWithTitle:subscriberCodeTitle];
-        //    actionSheet.cancelButtonIndex = destructiveIndex;//was buggy
-
-
-	}
-    NSString * userService = nil ;
-    if (credentials) userService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"UserService"];
-    if (userService) {
-        usernamePasswordTitle = [[NSBundle mainBundle]stringForKey:@"I have a username and password"];
-        [actionSheet addButtonWithTitle:usernamePasswordTitle];
-        //    actionSheet.cancelButtonIndex = destructiveIndex;//was buggy
-        
-        
-	}
-	
-	//Add the cancel button. It will not be displayed on the iPad.
-	NSInteger destructiveIndex = [actionSheet addButtonWithTitle:[[NSBundle mainBundle]stringForKey:@"Cancel"]];
-	actionSheet.destructiveButtonIndex = destructiveIndex;
-    actionSheet.cancelButtonIndex = destructiveIndex;
-
-	
-	
-	
-	/*for (NSString * invalidS in response.invalidProductIdentifiers){
-		//SLog(@"invalidS:%@",invalidS);
-	}*/
-	//[actionSheet showInView:self.superview];
-    if (self.superview)//The superview may have been released if a refresh download has taken place
-    {
-        if ([WAUtilities isBigScreen]){
-            //SLog(@"will show from rect with width %f and x %f and y %f",self.frame.size.width,self.frame.origin.x, self.frame.origin.y);
-            [actionSheet showFromRect:self.frame inView:self.superview animated:YES];
-
+    //If waproductid was specified, do not display action sheet
+    NSString * productId = [urlString valueOfParameterInUrlStringforKey:@"waproductid"];
+    if (productId){
+        for (SKProduct *product in response.products) {
+            //SLog(@"found %@, looking for %@",[product productIdentifier],productId);
+            if ([[productId appStoreProductIDForLibrelioProductID]isEqualToString:[product productIdentifier]]){
+                //SLog(@"will try to buy %@",product);
+                [self orderProduct:product];
+            }
+            
+     
         }
-        else [actionSheet showFromTabBar:self.currentViewController.tabBarController.tabBar];
 
+    }
+    else{
+        //Otherwise, reate actionSheet
+        NSString * theTitle = [[NSBundle mainBundle]stringForKey:@"What do you want to buy?"];
+        NSString * customTitle = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"TextForBuyTitle"];
+        if (customTitle) theTitle = [[NSBundle mainBundle]stringForKey:customTitle];
         
-    }	
-    [actionSheet release];
+        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:theTitle
+                                                                 delegate:self cancelButtonTitle:nil destructiveButtonTitle:nil
+                                                        otherButtonTitles:nil];
+        
+        
+        //Parse response
+        products = [[NSArray alloc] initWithArray: response.products];
+        for (SKProduct *product in products) {
+            //SLog(@"Product received:%@",product);
+            
+            //Format the price
+            NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+            [numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+            [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+            [numberFormatter setLocale:product.priceLocale];
+            NSString *formattedString = [numberFormatter stringFromNumber:product.price];
+            [numberFormatter release];
+            
+            //Append duration to description if needed
+            NSString * completeTitle = [product.localizedTitle titleWithSubscriptionLengthForAppStoreProductId:product.productIdentifier] ;
+            
+            [actionSheet addButtonWithTitle:[NSString stringWithFormat:@"%@: %@",completeTitle, formattedString]];
+            
+            
+            ;
+        }
+        //Add a Restore my purchases button
+        NSString * locTitle0 = [[NSBundle mainBundle]stringForKey:@"Restore my purchases"];//This is the default title
+        [actionSheet addButtonWithTitle:locTitle0];
+        
+        //Add a Code Enter button in case we have a CodeService key in Application_.plist
+        NSString * codeService = nil ;
+        if (credentials) codeService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"CodeService"];
+        if (codeService) {
+            //SLog(@"Code Hash:%@",codeHash);
+            subscriberCodeTitle = [[NSBundle mainBundle]stringForKey:@"I have a subscriber code"];
+            [actionSheet addButtonWithTitle:subscriberCodeTitle];
+            //    actionSheet.cancelButtonIndex = destructiveIndex;//was buggy
+            
+            
+        }
+        NSString * userService = nil ;
+        if (credentials) userService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"UserService"];
+        if (userService) {
+            usernamePasswordTitle = [[NSBundle mainBundle]stringForKey:@"I have a username and password"];
+            [actionSheet addButtonWithTitle:usernamePasswordTitle];
+            //    actionSheet.cancelButtonIndex = destructiveIndex;//was buggy
+            
+            
+        }
+        
+        //Add the cancel button. It will not be displayed on the iPad.
+        NSInteger destructiveIndex = [actionSheet addButtonWithTitle:[[NSBundle mainBundle]stringForKey:@"Cancel"]];
+        actionSheet.destructiveButtonIndex = destructiveIndex;
+        actionSheet.cancelButtonIndex = destructiveIndex;
+        
+        
+        
+        
+        /*for (NSString * invalidS in response.invalidProductIdentifiers){
+         //SLog(@"invalidS:%@",invalidS);
+         }*/
+        //[actionSheet showInView:self.superview];
+        if (self.superview)//The superview may have been released if a refresh download has taken place
+        {
+            if ([WAUtilities isBigScreen]){
+                //SLog(@"will show from rect with width %f and x %f and y %f",self.frame.size.width,self.frame.origin.x, self.frame.origin.y);
+                [actionSheet showFromRect:self.frame inView:self.superview animated:YES];
+                
+            }
+            else [actionSheet showFromTabBar:self.currentViewController.tabBarController.tabBar];
+            
+            
+        }	
+        [actionSheet release];
+        
+    }
+    
 	
  
 }
@@ -232,12 +255,7 @@
             //The enter username and password button was clicked
             [self createUsernamePasswordAlert];
     } else {
-		SKProduct  * product = [products objectAtIndex:buttonIndex];
-		//NSString * itemID = product.productIdentifier;
-		//SKPayment *payment = [SKPayment paymentWithProductIdentifier:itemID];
-        SKPayment * payment = [SKPayment paymentWithProduct:product];
-		// Add storeObserver in LibrelioAppDelegate
-		[[SKPaymentQueue defaultQueue] addPayment:payment];	
+        [self orderProduct:[products objectAtIndex:buttonIndex]];
 		
 	}
 
@@ -297,15 +315,19 @@
 - (void) transactionStatusDidChangeWithNotification:(NSNotification *) notification
 {
 	//Check whether the transaction is for a product requested here or a subscription
-	NSSet * acceptableIDs = [urlString relevantSKProductIDsForUrlString];
+	NSOrderedSet * acceptableLibrelioIDs = [urlString relevantLibrelioProductIDsForUrlString];
+    NSMutableSet * acceptableAppStoreIDs = [NSMutableSet set];
+    for (NSString * curentID in acceptableLibrelioIDs){
+        NSString * appStoreID =  [curentID appStoreProductIDForLibrelioProductID];
+        [acceptableAppStoreIDs addObject:appStoreID];
+    }
+
 	
 	SKPaymentTransaction *transaction = notification.object;
 	NSString * productId = transaction.payment.productIdentifier;
-	NSArray *parts = [productId componentsSeparatedByString:@"."];
-	NSString *shortID2 = [parts objectAtIndex:[parts count]-1];
 	
 	
-	if ([acceptableIDs containsObject:shortID2]){
+	if ([acceptableAppStoreIDs containsObject:productId]){
 		switch (transaction.transactionState)
 		{
 			case SKPaymentTransactionStateRestored:{
@@ -507,12 +529,12 @@
     //Add SHKActivityIndicator
     [[SHKActivityIndicator currentIndicator] displayActivity:[[NSBundle mainBundle]stringForKey:@"Connecting..."]];
     
-    //Get the ID of the product. Our convention is that it is always the name of the file without extension
+    //Get the Librelio ID of the product. Our convention is that it is always the name of the file without extension
     NSString * shortID = [[urlString urlByRemovingFinalUnderscoreInUrlString] nameOfFileWithoutExtensionOfUrlString];
     //SLog(@"ShortID:%@, theString:%@",shortID,theString);
     
     //get product data
-    NSString * itemID = [NSString stringWithFormat:@"%@.%@",[[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"],shortID];
+    NSString * itemID = [shortID appStoreProductIDForLibrelioProductID];
     //SLog(@"ItemID:%@",itemID);
     SKProductsRequest *request;
     //Add all subscriptions, only if we have a secret key
@@ -521,10 +543,10 @@
     if (credentials) sharedSecret = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"SharedSecret"];
     if (sharedSecret){
         NSMutableSet * productIdentifiers = [NSMutableSet set];
-        NSSet * relevantIDs = [urlString relevantSKProductIDsForUrlString];
+        NSOrderedSet * relevantIDs = [urlString relevantLibrelioProductIDsForUrlString];
         //SLog(@"Relevant ids:%@",relevantIDs);
         for (NSString * curentID in relevantIDs){
-            NSString * tempID = [NSString stringWithFormat:@"%@.%@",[[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"],curentID];
+            NSString * tempID =  [curentID appStoreProductIDForLibrelioProductID];
             [productIdentifiers addObject:tempID];
         }
         //Request the data
@@ -543,7 +565,17 @@
     
 }
 
+- (void) orderProduct:(SKProduct*)product{
+    //Slog(@"Will order product %@ %@",product,product.productIdentifier);
+     //NSString * itemID = product.productIdentifier;
+    //SKPayment *payment = [SKPayment paymentWithProductIdentifier:itemID];
+    SKPayment * payment = [SKPayment paymentWithProduct:product];
+    // Add storeObserver in LibrelioAppDelegate
+    [[SKPaymentQueue defaultQueue] addPayment:payment];
 
+    
+    
+}
 
 
 @end

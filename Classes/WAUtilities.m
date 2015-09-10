@@ -13,7 +13,7 @@
 
 
 #define kDownloadUrl @"http://librelio-europe.s3.amazonaws.com"
-#define kCheckAppStoreUrl @"http://download.librelio.com/downloads/appstorev2.php?receipt=%@&sharedsecret=%@&urlstring=%@&userkey=%@"
+#define kCheckAppStoreUrl @"http://download.librelio.com/downloads/appstorev2.php?receipt=%@&sharedsecret=%@&urlstring=%@"
 #define kCheckPasswordUrl @"http://download.librelio.com/downloads/pswd.php?code=%@&service=%@&urlstring=%@&client=%@&app=%@&deviceid=%@"
 #define kCheckUsernamePasswordUrl @"http://download.librelio.com/downloads/subscribers.php?user=%@&pswd=%@&urlstring=%@&client=%@&app=%@&service=%@&deviceid=%@"
 
@@ -81,12 +81,6 @@
 
 }
 
-+ (NSString*) urlByChangingExtensionOfUrlString:(NSString*)urlString toSuffix:(NSString*)newSuffix{
-	NSString *fileName = [urlString noArgsPartOfUrlString];
-	NSString *newFileName = [NSString stringWithFormat:@"%@%@", [fileName nameOfFileWithoutExtensionOfUrlString],newSuffix];
-	return [self absoluteUrlOfRelativeUrl:newFileName relativeToUrl:urlString];
-
-}
 
 
 + (NSString*) urlByRemovingContainingFolderIfSameNameInUrlString:(NSString*)urlString {
@@ -222,7 +216,7 @@
     [[NSFileManager defaultManager]removeItemAtPath:path error:NULL];
     
     //Update the metadata dic if needed
-    NSString * plistUrl = [WAUtilities urlByChangingExtensionOfUrlString:urlString toSuffix:@"_metadata.plist"];
+    NSString * plistUrl = [urlString urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
     NSString * plistPath = [[NSBundle mainBundle] pathOfFileWithUrl:plistUrl];
     if (plistPath){
         NSMutableDictionary * metaDic = [NSMutableDictionary dictionaryWithContentsOfFile:plistPath];
@@ -340,7 +334,7 @@
         }
         else {
             NSString * mainFilePath = [[NSBundle mainBundle] pathOfFileWithUrl:urlString];
-            NSString * metadataPlistPath = [WAUtilities urlByChangingExtensionOfUrlString:mainFilePath toSuffix:@"_metadata.plist"];
+            NSString * metadataPlistPath = [mainFilePath urlByChangingExtensionOfUrlStringToSuffix:@"_metadata.plist"];
             NSDictionary * metaDic = [NSDictionary dictionaryWithContentsOfFile:metadataPlistPath];
             if (![metaDic objectForKey:@"DownloadComplete"]){
                 //SLog(@"No Download complete flag for url:%@",urlString);
@@ -409,12 +403,11 @@
         return forcedUrl;
     }
     else{
-        NSString * appLongID = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"];
-        NSArray *parts = [appLongID componentsSeparatedByString:@"."];
-        NSString * appShortID = [parts objectAtIndex:[parts count]-1];
-        NSString * clientShortID = [parts objectAtIndex:[parts count]-2];
-        if ([clientShortID isEqualToString:@"widgetavenue"]) clientShortID = @"librelio";//this is for back compatibility reasons
-        NSString * completeUrl = [NSString stringWithFormat:@"%@/%@/%@%@",kDownloadUrl, clientShortID,appShortID,[urlString noArgsPartOfUrlString]];
+        NSString * appShortId = [[NSBundle mainBundle] getLibrelioAppId];
+        NSString * clientShortId = [[NSBundle mainBundle] getLibrelioClientId];
+        
+        NSString * completeUrl = [NSString stringWithFormat:@"%@/%@/%@%@",kDownloadUrl, clientShortId,appShortId,[urlString noArgsPartOfUrlString]];
+        //SLog(@"completeUrl %@",completeUrl);
         return completeUrl;
     }
 }
@@ -431,19 +424,7 @@
 
 + (NSString *) completeCheckAppStoreUrlforUrlString:(NSString*)urlString{
 	//Retrieve receipt if it has been stored
-    NSSet * relevantIDs = [urlString relevantSKProductIDsForUrlString];
-    NSString * receipt = nil;
-    NSString * userKey = nil;
-    for(NSString * currentID in relevantIDs){
-        NSString *tempKey = [NSString stringWithFormat:@"%@-receipt",currentID];
-        NSString * tempReceipt = [[NSUserDefaults standardUserDefaults] objectForKey:tempKey];
-        if (tempReceipt){
-            receipt = tempReceipt;
-            userKey = tempKey;
-        }
-    }
-	if (!receipt) return nil;//If there is no receipt, no need to check app store => return nil
-	
+    NSString * receipt = [urlString receiptForUrlString];
 	//Retrieve shared secret
 	NSString * sharedSecret = @"";
 	NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
@@ -453,7 +434,7 @@
 	NSString * encodedUrl = [[urlString noArgsPartOfUrlString] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 
 	
-	NSString * retUrl = [NSString stringWithFormat:kCheckAppStoreUrl,receipt,sharedSecret,encodedUrl,userKey];
+	NSString * retUrl = [NSString stringWithFormat:kCheckAppStoreUrl,receipt,sharedSecret,encodedUrl];
 	//SLog(@"retAppSUrl=%@",retUrl);
 	return retUrl;
 	
@@ -475,14 +456,11 @@
 	NSString * encodedUrl = [[urlString noArgsPartOfUrlString] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
 
 	//Get the client and app names
-	NSString * appLongID = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"];
-	NSArray *parts = [appLongID componentsSeparatedByString:@"."];
-	NSString * appShortID = [parts objectAtIndex:[parts count]-1];
-	NSString * clientShortID = [parts objectAtIndex:[parts count]-2];
-	if ([clientShortID isEqualToString:@"widgetavenue"]) clientShortID = @"librelio";//this is for back compatibility reasons
+    NSString * appShortId = [[NSBundle mainBundle] getLibrelioAppId];
+    NSString * clientShortId = [[NSBundle mainBundle] getLibrelioClientId];
 	
     NSString * deviceid = [self getUUID];
-	NSString * retUrl = [NSString stringWithFormat:kCheckPasswordUrl,password,codeService,encodedUrl,clientShortID,appShortID,deviceid];
+	NSString * retUrl = [NSString stringWithFormat:kCheckPasswordUrl,password,codeService,encodedUrl,clientShortId,appShortId,deviceid];
 	//SLog(@"retpassUrl=%@",retUrl);
 	return retUrl;
 	
@@ -499,11 +477,8 @@
 	NSString * encodedUrl = [[urlString noArgsPartOfUrlString] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
     
 	//Get the client and app names
-	NSString * appLongID = [[[NSBundle mainBundle] infoDictionary]objectForKey:@"CFBundleIdentifier"];
-	NSArray *parts = [appLongID componentsSeparatedByString:@"."];
-	NSString * appShortID = [parts objectAtIndex:[parts count]-1];
-	NSString * clientShortID = [parts objectAtIndex:[parts count]-2];
-	if ([clientShortID isEqualToString:@"widgetavenue"]) clientShortID = @"librelio";//this is for back compatibility reasons
+    NSString * appShortId = [[NSBundle mainBundle] getLibrelioAppId];
+    NSString * clientShortId = [[NSBundle mainBundle] getLibrelioClientId];
 	
     NSString * deviceid = [self getUUID];
     NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
@@ -511,8 +486,8 @@
     if (credentials) userService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"UserService"];
 
     
-	NSString * retUrl = [NSString stringWithFormat:kCheckUsernamePasswordUrl,username,password,encodedUrl,clientShortID,appShortID,userService,deviceid];
-	//SLog(@"retpassUrl=%@",retUrl);
+	NSString * retUrl = [NSString stringWithFormat:kCheckUsernamePasswordUrl,username,password,encodedUrl,clientShortId,appShortId,userService,deviceid];
+	//SLog(@"retUrl=%@",retUrl);
 	return retUrl;
 	
 }
@@ -550,5 +525,35 @@
 	
 }
 
++ (NSString *) subscribeString{
+    //First, check if the app offers subscriptions
+    NSString * ret = @"";
+    NSString * credentials = [[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"];
+    if (credentials){
+        NSString * sharedSecret = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"SharedSecret"];
+        NSString * userService = [[NSDictionary dictionaryWithContentsOfFile:credentials]objectForKey:@"UserService"];
+        //If the app offers subscriptions, either sharedSecret or userService should be set
+        if (sharedSecret||userService){
+            //Now check if subscriptions are already active
+            NSString * nodownloadUrlString = @"http://localhost/wanodownload.pdf";
+            NSString * receipt = [nodownloadUrlString receiptForUrlString];
+            if (receipt){
+                //SLog(@"receipt found:%@",receipt);
+                //Subscriptions are already active, don't show button
+            }
+            else{
+                ret = [[NSBundle mainBundle]stringForKey:@"Subscription"];
+            }
+            
+            
+            
+        }
+        
+    }
+    return ret;
+    
+}
+
 
 @end
+

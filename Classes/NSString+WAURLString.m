@@ -147,6 +147,28 @@
 	
 }
 
+- (NSString*) urlBySubstitutingHyphensWithResolutionForOrientation:(UIInterfaceOrientation)orientation{
+    if ([self rangeOfString:@"--x--"].location == NSNotFound){
+        return self;
+    }
+    else{
+        CGFloat height = [[ UIScreen mainScreen ]bounds].size.height;
+        CGFloat width = [[ UIScreen mainScreen ]bounds].size.width;
+        NSString*resolution;
+        switch(orientation)
+        {
+            case UIInterfaceOrientationPortrait:
+            case UIInterfaceOrientationPortraitUpsideDown:
+                resolution =  [NSString stringWithFormat:@"--%fx%fpx",width,height];
+            default:
+                resolution =  [NSString stringWithFormat:@"--%fx%fpx",height,width];
+        }
+        NSString * ret = [self stringByReplacingOccurrencesOfString:@"--x--" withString:resolution];
+        return ret;
+        
+    }
+}
+
 - (NSString*) urlByRemovingFinalUnderscoreInUrlString{
 	NSRange range = [self rangeOfString:@"_." options:NSBackwardsSearch];
 	NSString * ret = self;
@@ -162,6 +184,13 @@
      
      }*/
     
+    
+}
+
+- (NSString*) urlByChangingExtensionOfUrlStringToSuffix:(NSString*)newSuffix{
+    NSString *fileName = [self noArgsPartOfUrlString];
+    NSString *newFileName = [NSString stringWithFormat:@"%@%@", [fileName nameOfFileWithoutExtensionOfUrlString],newSuffix];
+    return [WAUtilities absoluteUrlOfRelativeUrl:newFileName relativeToUrl:self];
     
 }
 
@@ -241,6 +270,26 @@
 	
 }
 
+
+- (NSString*) urlOfMainFileOfPackageWithUrlString{
+    //If extension is .plugin, change url string.
+    NSString* extension = [self pathExtension];
+    if ([extension isEqualToString:@"plugin"]){
+        NSString * fileName = [self nameOfFileWithoutExtensionOfUrlString];
+        return ([NSString stringWithFormat:@"%@/%@.pdf",self,fileName]);
+        
+    }
+    else if ([extension isEqualToString:@"rtfd"]){
+        return ([NSString stringWithFormat:@"%@/index.html",self]);
+    }
+    else{
+        return self;
+    }
+    
+}
+
+
+
 -   (NSString *) urlOfUnzippedFolder{
     //If there is a waroot arg, use it
     NSString * baseUrl = [self valueOfParameterInUrlStringforKey:@"waroot"];
@@ -272,13 +321,14 @@
 	else if ([scheme isEqualToString:@"self"]) return LinkTypeSelf;
 	else if ([scheme isEqualToString:@"buy"]) return LinkTypeBuy;
     else if ([scheme isEqualToString:@"search"]) return LinkTypeSearch;
-	else if ([scheme isEqualToString:@"share"]) return LinkTypeShare;
+    else if ([scheme isEqualToString:@"share"]) return LinkTypeShare;
+    else if ([scheme isEqualToString:@"ad"]) return LinkTypeAds;
 	else if ([externalSchemes containsObject:scheme]) return LinkTypeExternal;
 	else if ([scheme isEqualToString:@"file"]) return LinkTypeFileManager;
 	else if ([extension isEqualToString:@"mov"]||[extension isEqualToString:@"mp4"]) return LinkTypeVideo; 
 	else if ([extension isEqualToString:@"png"]||[extension isEqualToString:@"jpg"]) return LinkTypeSlideShow;
 	else if ([extension isEqualToString:@"mp3"]||[extension isEqualToString:@"mp3"]) return LinkTypeMusic;
-	else if ([extension isEqualToString:@"pdf"]) return LinkTypePaginated;
+	else if ([extension isEqualToString:@"pdf"]||[extension isEqualToString:@"folio"]) return LinkTypePaginated;
 	else if ([extension isEqualToString:@"gif"]) return LinkTypeAnimation;
 	else if ([extension isEqualToString:@"rss"]) return LinkTypeTable;
 	else if ([extension isEqualToString:@"atom"]) return LinkTypeTable;
@@ -288,7 +338,7 @@
 	else if ([extension isEqualToString:@"kml"]) return LinkTypeMap;
 	else if ([extension isEqualToString:@"chart"]) return LinkTypeChart;
 	else if ([extension isEqualToString:@"scan"]) return LinkTypeScan;
-	else if ([extension isEqualToString:@"txt"]) return LinkTypeText;
+    else if ([extension isEqualToString:@"txt"]) return LinkTypeText;
 	else if (RSSrange.location != NSNotFound) return LinkTypeRSS;//The URL contains the word feed, we assume it is an RSS feed
 	else if (MAPrange.location != NSNotFound) return LinkTypeMap; 
 	else if (iTunesRange.location != NSNotFound) return LinkTypeExternal; 
@@ -391,6 +441,11 @@
             ret = @"WAAnalyticsView";
             break;
         }
+        case LinkTypeAds:{
+            ret = @"WAAdView";
+            break;
+        }
+
 
             
 
@@ -414,7 +469,8 @@
 	else if ([extension isEqualToString:@"atom"]) return ParserTypeAtom;
 	else if ([extension isEqualToString:@"local"]) return ParserTypeLocal;
 	else if ([extension isEqualToString:@"oam"]) return ParserTypeOAM;
-	else if ([extension isEqualToString:@"zip"]) return ParserTypeZip;
+    else if ([extension isEqualToString:@"zip"]) return ParserTypeZip;
+    else if ([extension isEqualToString:@"folio"]) return ParserTypeFolio;
 	else return ParserTypeHTML;
 	
 }
@@ -461,9 +517,13 @@
 			break;
 		}
         case ParserTypeZip:{
-			ret = @"WAZippedHtmlParser";
-			break;
-		}
+            ret = @"WAZippedHtmlParser";
+            break;
+        }
+        case ParserTypeFolio:{
+            ret = @"WAFolioParser";
+            break;
+        }
 
 
 		default:
@@ -494,46 +554,125 @@
     return NO;
 }
 
-- (NSSet*) relevantSKProductIDsForUrlString{
+- (NSString*) appStoreProductIDForLibrelioProductID{
+    NSString * ret = [NSString stringWithFormat:@"com.%@.%@.%@",[[NSBundle mainBundle] getLibrelioClientId],[[NSBundle mainBundle] getLibrelioAppId],self];
+    
+    //Check if we have specific IDs
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSDictionary * specificIds = [app_Dic objectForKey:@"SpecificAppStoreIDs"];
+    if (specificIds) {
+        NSString * specificId = [specificIds objectForKey:self];
+        if (specificId) ret = specificId;
+    }
+    
+
+    
+    return ret;
+
+    
+}
+
+- (NSString*) librelioProductIDForAppStoreProductID{
+    NSArray *parts = [self componentsSeparatedByString:@"."];
+    //Slog(@"parts:%@",parts);
+    NSString *ret = [parts objectAtIndex:[parts count]-1];
+
+     //Check if we have specific IDs
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSDictionary * specificIds = [app_Dic objectForKey:@"SpecificAppStoreIDs"];
+    if (specificIds) {
+        NSArray *temp = [specificIds allKeysForObject:ret];
+        if ([temp count]>0){
+            //Slog(@"temp:%@",temp);
+            ret = [temp objectAtIndex:0];
+           
+        }
+    }
+    
+    
+    
+    return ret;
+    
+    
+}
+
+
+
+- (NSOrderedSet*) relevantLibrelioProductIDsForUrlString{
     NSString * shortID = [[self urlByRemovingFinalUnderscoreInUrlString] nameOfFileWithoutExtensionOfUrlString];
-	NSSet * ret = [NSSet setWithObjects:shortID,@"MonthlySubscription",@"WeeklySubscription",@"QuarterlySubscription",@"YearlySubscription",@"HalfYearlySubscription",@"YearlySubscription2",@"HalfYearlySubscription2",@"HalfYearlySubscription3",@"FreeSubscription",nil];
+    NSOrderedSet * ret = [NSOrderedSet orderedSetWithObjects:shortID,@"MonthlySubscription",@"WeeklySubscription",@"QuarterlySubscription",@"YearlySubscription",@"HalfYearlySubscription",@"YearlySubscription2",@"HalfYearlySubscription2",@"HalfYearlySubscription3",@"FreeSubscription",nil];
     return ret;
 
 }
 
-- (NSString *) titleWithSubscriptionLengthForId:(NSString*)theId{
+- (NSString *) titleWithSubscriptionLengthForAppStoreProductId:(NSString*)theId{
 	NSArray *parts = [theId componentsSeparatedByString:@"."];
-	theId = [parts objectAtIndex:[parts count]-1];
+	NSString * shortId = [parts objectAtIndex:[parts count]-1];//For legacy reasons
     NSString * ret = self;
-    if ([theId isEqualToString:@"WeeklySubscription"] ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"week"]];
-    if ([theId isEqualToString:@"MonthlySubscription"] ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"month"]];
-    if ([theId isEqualToString:@"QuarterlySubscription"] ) ret = [NSString stringWithFormat:@"%@ 3 %@",ret,[[NSBundle mainBundle]stringForKey:@"months"]];
-    if ([theId isEqualToString:@"HalfYearlySubscription"]||[theId isEqualToString:@"HalfYearlySubscription2"]||[theId isEqualToString:@"HalfYearlySubscription3"] ) ret = [NSString stringWithFormat:@"%@ 6 %@",ret,[[NSBundle mainBundle]stringForKey:@"months"]];
-    if ([theId isEqualToString:@"YearlySubscription"]||[theId isEqualToString:@"YearlySubscription2"]  ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"year"]];
+    
+    if ([theId isEqualToString:[@"WeeklySubscription" appStoreProductIDForLibrelioProductID]] ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"week"]];
+    if ([theId isEqualToString:[@"MonthlySubscription" appStoreProductIDForLibrelioProductID]] ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"month"]];
+    if ([theId isEqualToString:[@"QuarterlySubscription" appStoreProductIDForLibrelioProductID]] ) ret = [NSString stringWithFormat:@"%@ 3 %@",ret,[[NSBundle mainBundle]stringForKey:@"months"]];
+    if ([theId isEqualToString:[@"HalfYearlySubscription" appStoreProductIDForLibrelioProductID]]||[shortId isEqualToString:@"HalfYearlySubscription2"]||[theId isEqualToString:@"HalfYearlySubscription3"] ) ret = [NSString stringWithFormat:@"%@ 6 %@",ret,[[NSBundle mainBundle]stringForKey:@"months"]];
+    if ([theId isEqualToString:[@"YearlySubscription" appStoreProductIDForLibrelioProductID]]||[shortId isEqualToString:@"YearlySubscription2"]  ) ret = [NSString stringWithFormat:@"%@ 1 %@",ret,[[NSBundle mainBundle]stringForKey:@"year"]];
     return ret;
     
 }
 
 - (NSString*) receiptForUrlString{
     //Check whether we have active subscriptions, or if we already bought this product, or if a subscription code was provided earlier
-    NSSet * relevantIDs = [self relevantSKProductIDsForUrlString];
+    NSOrderedSet * relevantIDs = [self relevantLibrelioProductIDsForUrlString];
+    NSString * shortID = [relevantIDs firstObject]; //The shortID is always first, then come the subscription IDs.
     NSString * receipt = nil;
+    NSString *tempKeyShort = [NSString stringWithFormat:@"%@-invalidreceipt",shortID];
+    NSString * invalidReceipt = [[NSUserDefaults standardUserDefaults] objectForKey:tempKeyShort];
     for(NSString * currentID in relevantIDs){
         NSString *tempKey = [NSString stringWithFormat:@"%@-receipt",currentID];
         NSString * tempReceipt = [[NSUserDefaults standardUserDefaults] objectForKey:tempKey];
         if (tempReceipt && ![tempReceipt isEqualToString:@""]){
-            receipt = tempReceipt;
+            //If this is a subscription receipt, check that it is not invalid for the current shortID
+            if ([currentID isEqual:shortID]) receipt = tempReceipt;
+            if (![tempReceipt isEqualToString:invalidReceipt])receipt = tempReceipt;
         }
     }
     //If no receipt was found, check whether user has entered a Subscription code
 	if (!receipt) receipt = [[NSUserDefaults standardUserDefaults] objectForKey:@"Subscription-code"];
     //If no receipt was found, finally check whether user has entered a username and password
 	if (!receipt) receipt = [[NSUserDefaults standardUserDefaults] objectForKey:@"Username"];
-    
+    //SLog( @"Will return receipt ___ %@ ____",receipt);
     return (receipt);
 
 
 }
+
+
+- (NSString*) completeAdUnitCodeForShortCode:(NSString*)shortAdUnitCode{
+    
+    //Check if there are several languages in the app; in this case, load ad in preferred language
+    NSDictionary * app_Dic = [NSDictionary dictionaryWithContentsOfFile:[[NSBundle mainBundle] pathOfFileWithUrl:@"Application_.plist"]];
+    NSString * language;
+    NSString * preferredLanguage;
+
+    if ([app_Dic objectForKey:@"Languages"]){
+        NSString * preferredPlist = [[NSUserDefaults standardUserDefaults] objectForKey:@"PreferredLanguagePlist"];
+        if (preferredPlist){
+            //Find the language corresponding to the prefered plist; the language name is after the last "_"
+            NSString * plistFileName = [preferredPlist nameOfFileWithoutExtensionOfUrlString];
+            NSArray *parts = [plistFileName componentsSeparatedByString:@"_"];
+            language = [parts objectAtIndex:[parts count]-1];
+            
+        }
+        else  language = [[NSLocale preferredLanguages] objectAtIndex:0];//If language has not been chosen by user yet, choose the default language
+        preferredLanguage = [language stringByAppendingString:@"_"];
+        
+    }
+    else{
+        preferredLanguage = @"";
+    }
+    return [NSString stringWithFormat:@"%@%@%@",self,preferredLanguage,shortAdUnitCode];
+
+}
+
 
 - (NSString*) queryStringByReplacingClause:(NSString*)clause withValue:(NSString*)newValue{
     NSString * oldValue = [self valueOfClause:(NSString*)clause];
@@ -585,35 +724,28 @@
 
 }
 
-//Created by Vladimir
-- (NSString *)device
+- (NSString *)stringFormattedRTF
+
 {
-    NSString * ret = [NSString stringWithFormat:@"%@Ipad", self];//Default
-    if (![WAUtilities isBigScreen]) ret = [NSString stringWithFormat:@"%@Iphone", self];
-    return ret;
+    NSMutableString *result = [NSMutableString string];
     
-    /**Seems to have caused problems with Apple 
-    switch(UIDevice.currentDevice.userInterfaceIdiom)
-    {
-        case UIUserInterfaceIdiomPhone:
-            return [NSString stringWithFormat:@"%@Iphone", self];
-        default:
-            return [NSString stringWithFormat:@"%@Ipad", self];
-    }**/
-}
-//Created by Vladimir
-+ (NSString *)orientation
-{
-    // UIDevice.currentDevice.orientation improperly returns orientation
-	// Source: http://stackoverflow.com/a/6680597/124115
-	switch ([[UIApplication sharedApplication] statusBarOrientation])
-    {
-        case UIDeviceOrientationPortrait:
-        case UIDeviceOrientationPortraitUpsideDown:
-            return @"Portrait";
-        default:
-            return @"Landscape";
+    for ( int index = 0; index < [self length]; index++ ) {
+        NSString *temp = [self substringWithRange:NSMakeRange( index, 1 )];
+        unichar tempchar = [self characterAtIndex:index];
+        
+        if ( tempchar > 127) {
+            [result appendFormat:@"\\uc0\\u%i ", tempchar];
+        } else {
+            [result appendString:temp];
+        }
     }
+    return result;
+}
+
+- (NSString*)stringWithRTFHeaderAndFooter{
+    NSString * rtfHeader = @"{\\rtf1\\ansi\\ansicpg1252\\cocoartf1344\\cocoasubrtf720\n{\\fonttbl\\f0\\fswiss\\fcharset0 Helvetica;}\n{\\colortbl;\\red255\\green255\\blue255;}\n\\paperw11900\\paperh16840\\margl1440\\margr1440\\vieww10800\\viewh8400\\viewkind0\n\\pard\\tx560\\tx1120\\tx1680\\tx2240\\tx2800\\tx3360\\tx3920\\tx4480\\tx5040\\tx5600\\tx6160\\tx6720\\pardirnatural\n\n\\f0 ";
+    return [NSString stringWithFormat:@"%@%@}",rtfHeader,self];
+
 }
 
 

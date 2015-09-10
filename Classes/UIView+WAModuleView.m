@@ -11,6 +11,7 @@
 #import "WABarButtonItemWithLink.h"
 #import "NSBundle+WAAdditions.h"
 #import "UIColor+WAAdditions.h"
+#import "UIButton+WAAdditions.h"
 #import "NSString+WAURLString.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -94,36 +95,37 @@
 #pragma mark -
 #pragma mark Nib and Layout management methods
 
-- (void) populateNibWithParser:(NSObject <WAParserProtocol>*)parser withButtonDelegate:(NSObject*)delegate  forRow:(int)row{
+- (void) populateNibWithParser:(NSObject <WAParserProtocol>*)parser withButtonDelegate:(NSObject*)delegate withController:(UIViewController*)controller displayingImages:(BOOL)displayImages forRow:(int)row{
    	for (UIView * subView in self.subviews){
-        //SLog(@"Found subview with tag %i.",subView.tag);
 		if (subView.tag>=0){
 			NSString * tempString;
-            tempString=[parser getDataAtRow:row forDataCol:(int)subView.tag];
+            if (row==0) tempString=[parser getHeaderForDataCol:(int)subView.tag];//This is conventional
+            else tempString=[parser getDataAtRow:row forDataCol:(int)subView.tag];
+
             //SLog(@"Found tempString:%@",tempString);
             //[parser getDataAtRow:row forQueryString:queryString forDataCol:subView.tag];Deprecated
 			if (!tempString){
 				subView.hidden = YES;
 			}
 			else {
+                //SLog(@"TestSubview:%@",subView);
                 subView.hidden = NO;
 				if ([subView isKindOfClass:[UIImageView class]]){
-					UIImageView * imView = (UIImageView*) subView; 
-					UIImage * img = [UIImage imageWithContentsOfFile:tempString];
-                    if (img){
-                        imView.image = img;
-                        //Add shadow
-                        imView.layer.shadowRadius = 10.0;
-                        imView.layer.shadowOpacity = 0.4;
-                        imView.layer.shadowOffset = CGSizeMake( 20.0, 10.0 );
+                    if (displayImages){
+                        UIImageView * imView = (UIImageView*) subView;
+                        UIImage * img = [UIImage imageWithContentsOfFile:tempString];
+                        if (img){
+                            imView.image = img;
+                        }
+                        else{
+                            //Delete corrupted file
+                            [WAUtilities deleteCorruptedResourceWithPath:tempString ForMainFileWithUrlString:parser.urlString];
+                            subView.hidden = YES;
+                        }
                         
                     }
                     else{
-                        //Delete corrupted file
-                        [WAUtilities deleteCorruptedResourceWithPath:tempString ForMainFileWithUrlString:parser.urlString];
                         subView.hidden = YES;
-
-                        
                     }
                     
                     
@@ -142,18 +144,23 @@
 					[wView loadHTMLString:tempString baseURL:baseURL];
 				}
 				else if  ([subView isKindOfClass:[UIButton class]]){
-					UIButton * buyButton = (UIButton*) subView; 
-					buyButton.backgroundColor = [buyButton titleShadowColorForState:UIControlStateNormal];//Conventionally, we use the shadow color to describe the background color
-					NSArray * parts = [tempString componentsSeparatedByString:@";"];
-					[buyButton setTitle:[parts objectAtIndex:0] forState:UIControlStateNormal];
-					[buyButton setTitle:[parts objectAtIndex:1] forState:UIControlStateApplication];//Store the link here
+                    NSArray * parts = [tempString componentsSeparatedByString:@";"];
+					UIButton * buyButton = (UIButton*) subView;
+
+                    buyButton.waTitle = [parts objectAtIndex:0];
+                    buyButton.waLink = [parts objectAtIndex:1];
 					[buyButton addTarget:delegate action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
 					
 					
 				}
+                else if ([subView conformsToProtocol:@protocol(WAModuleProtocol)]){
+                    //SLog(@"Conforms %@",subView);
+                    UIView <WAModuleProtocol>* moduleView = (UIView <WAModuleProtocol>*)subView;
+                    moduleView.currentViewController = controller;
+                    moduleView.urlString = tempString;
 				
 				
-				
+                }
 			}
 			
 			
@@ -161,31 +168,40 @@
 	}
 }
 
-
-+ (UIView *)getNibView:(NSString*) nibName defaultNib:(NSString*) defaultNibName forOrientation:(UIInterfaceOrientation)orientation{
++ (NSString *)getNibName:(NSString*) nibName defaultNib:(NSString*) defaultNibName forOrientation:(UIInterfaceOrientation)orientation{
     //SLog(@"Getting nib %@ with default %@",nibName, defaultNibName);
-	//Check if nibName.xib exists, otherwise use defaultNibName; 
+    //Check if nibName.xib exists, otherwise use defaultNibName;
     NSString * nibUrlString = [nibName stringByAppendingString:@".nib"];//see http://stackoverflow.com/questions/923706/checking-if-a-nib-or-xib-file-exists for explanation of using "nib" extension instead of "xib"
     NSString * nibPath = [[NSBundle mainBundle]pathOfFileWithUrl:nibUrlString forOrientation:orientation];
     //SLog(@"nibPath: %@",nibPath);
-	if(nibPath) nibName = [nibPath nameOfFileWithoutExtensionOfUrlString];
+    if(nibPath) nibName = [nibPath nameOfFileWithoutExtensionOfUrlString];
     else {
         nibPath = [[NSBundle mainBundle]pathOfFileWithUrl:[defaultNibName stringByAppendingString:@".nib"] forOrientation:orientation];
         if (nibPath) {
-            nibName = defaultNibName;
-
+            nibName = [nibPath nameOfFileWithoutExtensionOfUrlString];
+            
         }
         else{
             return nil;
         }
     }
+    //SLog (@"will return nibName:%@",nibName);
+    return nibName;
+
+}
+
+
++ (UIView *)getNibView:(NSString*) nibName defaultNib:(NSString*) defaultNibName forOrientation:(UIInterfaceOrientation)orientation{
+    NSString * chosenNibName = [self getNibName:nibName defaultNib:defaultNibName forOrientation:orientation];
+    if (!chosenNibName) return nil;
+
 	NSArray*    topLevelObjs = nil;
-    //SLog(@"NibName:%@",nibName);
-	topLevelObjs=	[[NSBundle mainBundle] loadNibNamed:nibName owner:nil options:nil];
+    //SLog(@"chosenNibName:%@",chosenNibName);
+	topLevelObjs=	[[NSBundle mainBundle] loadNibNamed:chosenNibName owner:nil options:nil];
 	
-	if (!topLevelObjs) topLevelObjs = [[NSBundle mainBundle] loadNibNamed:defaultNibName owner:nil options:nil];
 	UIView * nibView = [topLevelObjs lastObject];
-    
+    //SLog(@"will return:%@",nibView);
+   
 	return nibView;
 }
 

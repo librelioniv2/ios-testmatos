@@ -18,6 +18,7 @@ typedef enum {
     ParserTypeLocal=9,
     ParserTypeOAM=10,
     ParserTypeZip=11,
+    ParserTypeFolio=12,
 
 
     
@@ -47,6 +48,17 @@ typedef enum {
     DataColShare=16,
     DataColClass=17,
     DataColNib=18,
+    DataColLogin =19,
+    DataColNewsstandCover = 20,
+    DataColDownloadOrRead = 21,
+    DataColAd=24,
+    DataColDetail=25,
+    DataColDismiss=26,
+    DataColUnitPrice = 30,
+    DataColMonthlySubscriptionPrice=31,
+    DataColQuarterlySubscriptionPrice=32,
+    DataColHalfYearlySubscriptionPrice=33,
+    DataColYearlySubscriptionPrice=34,
     DataColNothing=999,
 } DataCol;
 
@@ -101,6 +113,8 @@ typedef enum {
  @return: YES if download of resources should be completed before displaying the file
  */
 - (BOOL) shouldCompleteDownloadResources;
+
+- (BOOL) shouldGetExtraInformation;
 
 
 @end
